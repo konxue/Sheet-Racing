@@ -1,5 +1,6 @@
 display.setStatusBar( display.HiddenStatusBar )
-
+local bg = display.newImageRect("bg.jpg", 1600 , 2600);
+bg.isVisible = true;
 local widget = require('widget')
 
 
@@ -8,23 +9,52 @@ local widget = require('widget')
   -----------------------------background--------------------------------
 
   local optionsMap =
-  {
-    frames = {
-        { x = 59, y = 61, width = 268, height = 267}, -- Vertical tile
-        { x = 391, y = 61, width = 268, height = 267}, -- Horizontal tile
-        { x = 59, y = 385, width = 268, height = 267}, -- Start tile
-        { x = 391, y = 385, width = 268, height = 267}, -- Finish tile
-        { x = 1148, y = 61, width = 267, height = 267}, -- Left tile
-        { x = 821, y = 61, width = 268, height = 267}, -- Right tile
-        { x = 821, y = 385, width = 268, height = 267}, -- left up tile
-        { x = 1148, y = 385, width = 267, height = 267}, -- Right up tile
-    }
-  };
+{
+  frames = {
+      { x = 119, y = 122, width = 533, height = 533}, -- Vertical tile 1
+      { x = 783, y = 122, width = 533, height = 533}, -- Horizontal tile 2
+      { x = 119, y = 771, width = 533, height = 533}, -- Start tile 3
+      { x = 783, y = 771, width = 533, height = 533}, -- Finish tile 4
+      { x = 2297, y = 122, width = 533, height = 533}, -- Left tile 5
+      { x = 1643, y = 122, width = 533, height = 533}, -- Right tile 6
+      { x = 1643, y = 771, width = 533, height = 533}, -- left up tile 7
+      { x = 2297, y = 771, width = 533, height = 533}, -- Right up tile 8
+  }
+};
   local sheetMap = graphics.newImageSheet( "map.png", optionsMap );
 
+local optionsCar =
+{
+  frames = {
+    { x = 193, y = 39, width = 98, height = 214},   -- 1 Audi
+    { x = 351, y = 33, width = 107, height = 220},  -- 2 BlackViper
+    { x = 521, y = 42, width = 92, height = 218},   -- 3 OrangeCar
+    { x = 41, y = 42, width = 102, height = 207},   -- 4 Ambulance still
+    { x = 41, y = 301, width = 102, height = 207},  -- 5 Ambulance animation xxo
+    { x = 41, y = 558, width = 102, height = 207},  -- 6 Ambulance animation xox
+    { x = 193, y = 558, width = 102, height = 207}, -- 7 Ambulance animation oxx
+    { x = 660, y = 48, width = 111, height = 204},  -- 8 Blue Minitruck
+    { x = 819, y = 53, width = 93, height = 196},   -- 9 MiniVan
+    { x = 189, y = 288, width = 116, height = 234}, -- 10 Taxi
+    { x = 351, y = 305, width = 144, height = 292}, -- 11 Truck
+    { x = 521, y = 324, width = 98, height = 214},  -- 12 Police still
+    { x = 521, y = 358, width = 98, height = 214},  -- 13 Police Animation oxx
+    { x = 686, y = 558, width = 98, height = 214},  -- 14 Police Animation oxo
+    { x = 845, y = 558, width = 98, height = 214},  -- 15 Police Animation xxo
+  }
+}
+  local sheetCar = graphics.newImageSheet( "car.png", optionsCar );
 
+  -- each map block is 533 x 533 size,
+  -- Bottom one: contentWidth/2, contentWidth/2 + 530
   local function mapMaker ()
-  local map1 = display.newImage (sheetMap, 1, display.contentWidth/2, display.contentWidth/2);
-  local map2 = display.newImage (sheetMap, 1, display.contentWidth/2, 0);
+  local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
+  local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
+  local map3 = display.newImage (sheetMap, 8, display.contentWidth/2+533, display.contentWidth/2);
+  end
+
+  local function carMaker()
+  local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
   end
   mapMaker();
+  carMaker();
