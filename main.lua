@@ -2,19 +2,19 @@ display.setStatusBar( display.HiddenStatusBar )
 local bg = display.newImageRect("bg.jpg", 1600 , 2600);
 bg.isVisible = true;
 local widget = require('widget')
-
+local carGroup = display.newGroup();
 
 -- this function will handle the moving of the fish
-  local function onMove(event)
-    
+local  function onMove(event)
     if event.phase == "began" then
 		event.target.markX = event.target.x;
-		event.target.markY = event.target.y;             
-	elseif event.phase == "moved" then
+		event.target.markY = event.target.y;
+	 elseif event.phase == "moved" then
 		local x = (event.x - event.xStart) + event.target.markX;
 		local y = (event.y - event.yStart) + event.target.markY;
 		event.target.x = x;
 		event.target.y = y;
+    print { "x: ".. event.target.x .. " y: " .. event.target.y};
 	end
 end
 
@@ -67,6 +67,9 @@ local optionsCar =
 
   local function carMaker()
   local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
+
+  car1:addEventListener( "touch", onMove);
   end
+
   mapMaker();
   carMaker();
