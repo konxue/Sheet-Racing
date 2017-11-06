@@ -4,7 +4,19 @@ bg.isVisible = true;
 local widget = require('widget')
 
 
-
+-- this function will handle the moving of the fish
+  local function onMove(event)
+    
+    if event.phase == "began" then
+		event.target.markX = event.target.x;
+		event.target.markY = event.target.y;             
+	elseif event.phase == "moved" then
+		local x = (event.x - event.xStart) + event.target.markX;
+		local y = (event.y - event.yStart) + event.target.markY;
+		event.target.x = x;
+		event.target.y = y;
+	end
+end
 
   -----------------------------background--------------------------------
 
