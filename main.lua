@@ -10,21 +10,21 @@ local widget = require('widget')
   local optionsMap =
   {
     frames = {
-        { x = 59, y = 61, width = 268, height = 267}, -- Vertical tile
-        { x = 391, y = 61, width = 268, height = 267}, -- Horizontal tile
-        { x = 59, y = 385, width = 268, height = 267}, -- Start tile
-        { x = 391, y = 385, width = 268, height = 267}, -- Finish tile
-        { x = 1148, y = 61, width = 267, height = 267}, -- Left tile
-        { x = 821, y = 61, width = 268, height = 267}, -- Right tile
-        { x = 821, y = 385, width = 268, height = 267}, -- left up tile
-        { x = 1148, y = 385, width = 267, height = 267}, -- Right up tile
+        { x = 45, y = 46, width = 200, height = 200}, -- Vertical tile 1
+        { x = 294, y = 46, width = 200, height = 200}, -- Horizontal tile 2
+        { x = 45, y = 290, width = 200, height = 200}, -- Start tile 3
+        { x = 294, y = 290, width = 200, height = 200}, -- Finish tile 4
+        { x = 862, y = 46, width = 199, height = 200}, -- Left tile 5
+        { x = 617, y = 46, width = 200, height = 200}, -- Right tile 6
+        { x = 617, y = 290, width = 200, height = 200}, -- left up tile 7
+        { x = 862, y = 290, width = 200, height = 200}, -- Right up tile 8
     }
   };
-  local sheetMap = graphics.newImageSheet( "map.png", optionsMap );
+  local sheetMap = graphics.newImageSheet( "map2.png", optionsMap );
 
 
   local function mapMaker ()
-  local map1 = display.newImage (sheetMap, 1, display.contentWidth/2, display.contentWidth/2);
-  local map2 = display.newImage (sheetMap, 1, display.contentWidth/2, 0);
+  local map1 = display.newImage (sheetMap, 1, display.contentWidth/2, display.contentWidth-60);
+  local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, 0);
   end
   mapMaker();
