@@ -14,7 +14,7 @@ local  function onMove(event)
 		local y = (event.y - event.yStart) + event.target.markY;
 		event.target.x = x;
 		event.target.y = y;
-    print { "x: ".. event.target.x .. " y: " .. event.target.y};
+    print("x: ".. event.target.x .. " y: " .. event.target.y);
 	end
 end
 
@@ -59,17 +59,17 @@ local optionsCar =
 
   -- each map block is 533 x 533 size,
   -- Bottom one: contentWidth/2, contentWidth/2 + 530
-  local function mapMaker ()
-  local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
-  local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
-  local map3 = display.newImage (sheetMap, 8, display.contentWidth/2+533, display.contentWidth/2);
-  end
+local function mapMaker ()
+    local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
+    local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
+    local map3 = display.newImage (sheetMap, 8, display.contentWidth/2+533, display.contentWidth/2);
+ end
 
-  local function carMaker()
-  local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
+local function carMaker()
+    local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
 
-  car1:addEventListener( "touch", onMove);
-  end
+    car1:addEventListener( "touch", onMove);
+end
 
-  mapMaker();
-  carMaker();
+mapMaker();
+carMaker();
