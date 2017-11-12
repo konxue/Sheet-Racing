@@ -16,10 +16,14 @@ local  function onMove(event)
 		event.target.x = x;
 		event.target.y = y;
 <<<<<<< HEAD
+<<<<<<< HEAD
     print ("x: ".. event.target.x .. " y: " .. event.target.y);
 =======
     print("x: ".. event.target.x .. " y: " .. event.target.y);
 >>>>>>> 8b3ee5f621f978a40f7de304ff0ff62aab0fcb5d
+=======
+    print("x: ".. event.target.x .. " y: " .. event.target.y);
+>>>>>>> fc2b5936e0a509f5c2364cef432f07181a90bdf8
 	end
 end
 
@@ -64,6 +68,7 @@ local optionsCar =
 
   -- each map block is 533 x 533 size,
   -- Bottom one: contentWidth/2, contentWidth/2 + 530
+<<<<<<< HEAD
 local function mapMaker ()
     local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
     local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
@@ -94,10 +99,77 @@ function carMove(event) -- move upward 10 pixel every 1/10 second
 =======
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
+=======
+
+--local function mapMaker ()
+  --[[
+    local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
+    local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
+    local map3 = display.newImage (sheetMap, 8, display.contentWidth/2+533, display.contentWidth/2);
+    ]]
+function addScrollableBg()
+    local bg1Image = { type="image", filename="scrolling_bg/1.png" }
+    local bg2Image = { type="image", filename="scrolling_bg/2.png" }
+
+    bg1 = display.newRect(0, 0, display.contentWidth, display.actualContentHeight)
+    bg1.fill = bg1Image
+    bg1.x = display.contentCenterX
+    bg1.y = display.contentCenterY
+
+    bg2 = display.newRect(0, 0, display.contentWidth, display.actualContentHeight)
+    bg2.fill = bg2Image
+    bg2.x = display.contentCenterX
+    bg2.y = display.contentCenterY - display.actualContentHeight
+end
+
+local scrollSpeed = 10
+
+local function moveBg(dt)
+    bg1.y = bg1.y + scrollSpeed * dt
+    bg2.y = bg2.y + scrollSpeed * dt
+
+    if (bg1.y - display.contentHeight/2) > display.actualContentHeight then
+      bg1:translate(0, -bg1.contentHeight * 2)
+    end
+    if (bg2.y - display.contentHeight / 2) > display.actualContentHeight then
+      bg2:translate(0, -bg2.contentHeight * 2)
+    end
+end
+
+local runtime = 0
+
+local function getDeltaTime()
+   local temp = system.getTimer()
+   local dt = (temp-runtime) / (1000/60)
+   runtime = temp
+   return dt
+end
+
+local function enterFrame()
+    local dt = getDeltaTime()
+    moveBg(dt)
+end
+
+function init()
+    addScrollableBg()
+    Runtime:addEventListener("enterFrame", enterFrame)
+end
+ --end
+
+
+local function carMaker()
+    local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2);
+>>>>>>> fc2b5936e0a509f5c2364cef432f07181a90bdf8
 
     car1:addEventListener( "touch", onMove);
 end
 
+<<<<<<< HEAD
 mapMaker();
 carMaker();
 >>>>>>> 8b3ee5f621f978a40f7de304ff0ff62aab0fcb5d
+=======
+--mapMaker();
+init()
+carMaker();
+>>>>>>> fc2b5936e0a509f5c2364cef432f07181a90bdf8
