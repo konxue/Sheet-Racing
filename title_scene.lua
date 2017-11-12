@@ -17,7 +17,7 @@ local btnSettings -- The settings button
 -- goes to the options scene
 function onSettingsPress( event )
   local options = { effect = "fromRight", time = 500 }
-  -- composer.gotoScene( 'settings_scene', options )
+  composer.gotoScene( 'gameplay_scene.lua', options )
 end
 
 -- Handles when the start button is pressed
@@ -38,39 +38,40 @@ function scene:create( event )
   --composerOptions["setting"] = 3000;
 
     -- Creates the background image
-    bg = display.newImage ('title_bg.jpg'); -- found at http://www.smspower.org/uploads/Hacks/AlexKiddInMiracleWorld-SMS-AlexKiddInBroNo-Mod-Title.png
+    bg = display.newImage ('titlebg.png'); -- found at http://www.smspower.org/uploads/Hacks/AlexKiddInMiracleWorld-SMS-AlexKiddInBroNo-Mod-Title.png
     bg.x = display.contentWidth / 2;
     bg.y= display.contentHeight / 2;
 
     -- options for the start button widget
     local startOptions = {
-      x = display.contentWidth / 2 - 50, -- just left of middle of screen
-      y = display.contentCenterY + 50, -- just below center of screen
+      x = display.contentWidth / 2 - 100, -- just left of middle of screen
+      y = display.contentCenterY + 300, -- just below center of screen
       label = "Start", -- start is the text
       labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
+      fontSize = 45,
+      textOnly = true,
       onRelease = onStartPress -- wiring up handler
     }
 
     -- options for the setting button widget
     local settingsOptions = {
-      x = display.contentWidth / 2 + 50, -- right right of center
-      y = display.contentCenterY + 50, -- just below center
+      x = display.contentWidth / 2 + 100, -- right right of center
+      y = display.contentCenterY + 300, -- just below center
       label = "Settings", -- settings is the text
       labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
+      fontSize = 45,
+      textOnly = true,
       onRelease = onSettingsPress -- wiring up handler
     }
     -- options for the member names
     local nameOptions =
  {
      text = "By: Donal Cavandough, Haocong Xue, and Joe OMara",
-     x = 130,
-     y = 178,
-     font = native.systemFont,
-     fontSize = 10,
-     align = "left"  -- Alignment parameter
+     x = display.contentCenterX,
+     y = 500,
+     fontSize = 19,
  }
     local membertext = display.newText( nameOptions ); -- Display to title screen
-    membertext:setFillColor (math.random(0.00,1.00),math.random(0.00,1.00),math.random(0.00,1.00)); --random color
     -- create the buttons with the options
     btnStart = widget.newButton( startOptions )
     btnSettings = widget.newButton( settingsOptions )
