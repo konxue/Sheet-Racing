@@ -13,10 +13,10 @@ local carGroup = display.newGroup();
 local car1;
 --local carStop = false;
 
--- physics.setDrawMode("hybrid")
+physics.setDrawMode("hybrid")
 
-local left = display.newRect(0,0, 110, display.actualContentHeight);
-local right = display.newRect(display.contentWidth,0 ,110,display.actualContentHeight);
+local left = display.newRect(0,0, 110, display.actualContentHeight + 350);
+local right = display.newRect(display.contentWidth,0 ,110,display.actualContentHeight + 350);
 physics.addBody( left, "static" );
 physics.addBody( right, "static" );
 physics.setGravity (0,0); -- no gravity
@@ -27,6 +27,9 @@ local  function onMove(event)
 		event.target.markX = event.target.x;
 	 elseif event.phase == "moved" then
 		local x = (event.x - event.xStart) + event.target.markX;
+    if (x < 50 or x > display.contentWidth - 50) then
+      return
+    end
 		event.target.x = x;
 
 	end
