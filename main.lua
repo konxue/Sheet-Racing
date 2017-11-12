@@ -86,7 +86,7 @@ function addScrollableBg()
     bg3.y = display.contentCenterY - display.actualContentHeight
 end
 
-local scrollSpeed = 10
+local scrollSpeed = 25
 
 local function moveBg(dt)
     bg1.y = bg1.y + scrollSpeed * dt
