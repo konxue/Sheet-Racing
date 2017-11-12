@@ -17,14 +17,14 @@ local btnSettings -- The settings button
 -- goes to the options scene
 function onSettingsPress( event )
   local options = { effect = "fromRight", time = 500 }
-  composer.gotoScene( 'gameplay_scene.lua', options )
+  -- composer.gotoScene( 'gameplay_scene.lua', options )
 end
 
 -- Handles when the start button is pressed
 -- Goes to the level1 scene
 function onStartPress( event )
   local options = { effect = "fade", time = 500 }
-  -- composer.gotoScene( 'level1_scene', options )
+  composer.gotoScene( 'gameplay_scene', options )
 end
 
 ---------------------------------------------------------------------------------
