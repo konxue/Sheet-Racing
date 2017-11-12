@@ -154,6 +154,11 @@ end
 init()
 carMaker();
 
+local function randomCar()
+  timer.performWithDelay( 10000, addObject, iterations)
+
+end
+
 ---------------------------------------------------------------------------------
 
 -- "scene:create()"
