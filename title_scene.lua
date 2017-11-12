@@ -44,32 +44,32 @@ function scene:create( event )
 
     -- options for the start button widget
     local startOptions = {
-      x = display.contentWidth / 2 - 100, -- just left of middle of screen
-      y = display.contentCenterY + 300, -- just below center of screen
+      x = display.contentWidth / 2 - 170, -- just left of middle of screen
+      y = display.contentCenterY + 350, -- just below center of screen
       label = "Start", -- start is the text
       labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
-      fontSize = 45,
+      fontSize = 60,
       textOnly = true,
       onRelease = onStartPress -- wiring up handler
     }
 
     -- options for the setting button widget
     local settingsOptions = {
-      x = display.contentWidth / 2 + 100, -- right right of center
-      y = display.contentCenterY + 300, -- just below center
+      x = display.contentWidth / 2 + 150, -- right right of center
+      y = display.contentCenterY + 350, -- just below center
       label = "Settings", -- settings is the text
       labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
-      fontSize = 45,
+      fontSize = 60,
       textOnly = true,
       onRelease = onSettingsPress -- wiring up handler
     }
     -- options for the member names
     local nameOptions =
  {
-     text = "By: Donal Cavandough, Haocong Xue, and Joe OMara",
+     text = "By: Donal, Haocong, and Joe",
      x = display.contentCenterX,
-     y = 500,
-     fontSize = 19,
+     y = 650,
+     fontSize = 35,
  }
     local membertext = display.newText( nameOptions ); -- Display to title screen
     -- create the buttons with the options
