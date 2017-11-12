@@ -31,7 +31,7 @@ local  function onMove(event)
 end
 
   -----------------------------background--------------------------------
-
+--[[
   local optionsMap =
 {
   frames = {
@@ -46,6 +46,7 @@ end
   }
 };
   local sheetMap = graphics.newImageSheet( "map.png", optionsMap );
+  ]]
 
 local optionsCar =
 {
@@ -72,13 +73,6 @@ local optionsCar =
   -- each map block is 533 x 533 size,
   -- Bottom one: contentWidth/2, contentWidth/2 + 530
 
-local function mapMaker ()
-    local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
-    local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
-    local map3 = display.newImage (sheetMap, 8, display.contentWidth/2+533, display.contentWidth/2);
- end
-
-
   local function carMaker()
   car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
   --car1:addEventListener( "touch", onMove);
@@ -88,8 +82,6 @@ function carMove(event) -- move upward 10 pixel every 1/10 second
   event.target.y = event.target.y-10;
  end
 --timer.performWithDelay( 1000, car1:carMove, 20 );
-  mapMaker();
-  carMaker();
   --local function carOFF()
   --carStop = true;
   --end
@@ -172,10 +164,6 @@ local function carMaker()
 
     car1:addEventListener( "touch", onMove);
 end
-
-
-mapMaker();
-carMaker();
 
 --mapMaker();
 init()
