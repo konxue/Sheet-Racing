@@ -15,15 +15,13 @@ local  function onMove(event)
 		local y = (event.y - event.yStart) + event.target.markY;
 		event.target.x = x;
 		event.target.y = y;
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     print ("x: ".. event.target.x .. " y: " .. event.target.y);
-=======
+
     print("x: ".. event.target.x .. " y: " .. event.target.y);
->>>>>>> 8b3ee5f621f978a40f7de304ff0ff62aab0fcb5d
-=======
+
     print("x: ".. event.target.x .. " y: " .. event.target.y);
->>>>>>> fc2b5936e0a509f5c2364cef432f07181a90bdf8
+
 	end
 end
 
@@ -68,14 +66,14 @@ local optionsCar =
 
   -- each map block is 533 x 533 size,
   -- Bottom one: contentWidth/2, contentWidth/2 + 530
-<<<<<<< HEAD
+
 local function mapMaker ()
     local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
     local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
     local map3 = display.newImage (sheetMap, 8, display.contentWidth/2+533, display.contentWidth/2);
  end
 
-<<<<<<< HEAD
+
   local function carMaker()
   car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
   --car1:addEventListener( "touch", onMove);
@@ -96,10 +94,10 @@ function carMove(event) -- move upward 10 pixel every 1/10 second
   -- carMove(car1),3)
   --carMove(car1)
   --end
-=======
+
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
-=======
+end
 
 --local function mapMaker ()
   --[[
@@ -165,17 +163,15 @@ end
 
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2);
->>>>>>> fc2b5936e0a509f5c2364cef432f07181a90bdf8
+
 
     car1:addEventListener( "touch", onMove);
 end
 
-<<<<<<< HEAD
+
 mapMaker();
 carMaker();
->>>>>>> 8b3ee5f621f978a40f7de304ff0ff62aab0fcb5d
-=======
+
 --mapMaker();
 init()
 carMaker();
->>>>>>> fc2b5936e0a509f5c2364cef432f07181a90bdf8
