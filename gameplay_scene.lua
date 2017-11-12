@@ -146,8 +146,8 @@ end
 
 
 local function carMaker()
-    local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2);
-    physics.addBody(car1, { friction = 5 })
+    local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+150);
+    physics.addBody(car1)
 
 
     car1:addEventListener( "touch", onMove);
