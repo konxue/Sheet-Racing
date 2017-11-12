@@ -157,8 +157,11 @@ end
 init()
 carMaker();
 
-local function randomCar()
-  timer.performWithDelay( 10000, addObject, iterations)
+local function randomObject()
+  --timer.performWithDelay( 10000, )
+  -- adding the objects to the screen every 10s, at random x,y
+  -- adding physics to the object
+  -- Make object moving downward
 
 end
 
