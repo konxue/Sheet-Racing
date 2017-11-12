@@ -1,3 +1,9 @@
+# Visual Studio stuff
+.vs
+
+# Photoshop projects
+.psd
+
 # Compiled Lua sources
 luac.out
 
