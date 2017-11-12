@@ -38,8 +38,8 @@ function scene:create( event )
   --composerOptions["setting"] = 3000;
 
     -- Creates the background image
-    bg = display.newImage ('title_bg.jpg'); -- found at http://www.smspower.org/uploads/Hacks/AlexKiddInMiracleWorld-SMS-AlexKiddInBroNo-Mod-Title.png
-    bg.x = display.contentWidth / 2;
+    bg = display.newImage ('titlebg.png'); -- found at http://www.smspower.org/uploads/Hacks/AlexKiddInMiracleWorld-SMS-AlexKiddInBroNo-Mod-Title.png
+    bg.x = display.contentWidth ;
     bg.y= display.contentHeight / 2;
 
     -- options for the start button widget

@@ -1,29 +1,24 @@
 display.setStatusBar( display.HiddenStatusBar )
-local composer = require('composer')
---[[
-local bg = display.newImageRect("bg.jpg", 1600 , 2600);
-bg.isVisible = true;
 local widget = require('widget')
+local physics = require("physics");
 local carGroup = display.newGroup();
 local car1;
-local carStop = false;
+--local carStop = false;
+
+local left = display.newRect(0,0,20, display.contentHeight);
+local right = display.newRect(display.contentWidth-20,0,20,display.contentHeight);
+physics.addBody( left, "static" );
+physics.addBody( right, "static" );
+physics.setGravity (0,0); -- no gravity
+
 -- this function will handle the moving of the fish
-]]
 local  function onMove(event)
     if event.phase == "began" then
 		event.target.markX = event.target.x;
-		event.target.markY = event.target.y;
 	 elseif event.phase == "moved" then
 		local x = (event.x - event.xStart) + event.target.markX;
-		local y = (event.y - event.yStart) + event.target.markY;
 		event.target.x = x;
-		event.target.y = y;
-
     print ("x: ".. event.target.x .. " y: " .. event.target.y);
-
-    print("x: ".. event.target.x .. " y: " .. event.target.y);
-
-    print("x: ".. event.target.x .. " y: " .. event.target.y);
 
 	end
 end
@@ -69,13 +64,12 @@ local optionsCar =
 
   -- each map block is 533 x 533 size,
   -- Bottom one: contentWidth/2, contentWidth/2 + 530
---[[
+
 local function mapMaker ()
     local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
     local map2 = display.newImage (sheetMap, 6, display.contentWidth/2, display.contentWidth/2);
     local map3 = display.newImage (sheetMap, 8, display.contentWidth/2+533, display.contentWidth/2);
  end
- ]]
 
 
   local function carMaker()
@@ -87,8 +81,8 @@ function carMove(event) -- move upward 10 pixel every 1/10 second
   event.target.y = event.target.y-10;
  end
 --timer.performWithDelay( 1000, car1:carMove, 20 );
-  --mapMaker();
-  --carMaker();
+  mapMaker();
+  carMaker();
   --local function carOFF()
   --carStop = true;
   --end
@@ -173,14 +167,9 @@ local function carMaker()
 end
 
 
--- mapMaker();
--- carMaker();
+mapMaker();
+carMaker();
 
 --mapMaker();
-
-
-
---init()
---carMaker();
-
-composer.gotoScene( 'title_scene' )
+init()
+carMaker();
