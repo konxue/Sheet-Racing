@@ -8,12 +8,15 @@ local scene = composer.newScene()
 
 local widget = require('widget')
 local physics = require("physics");
+physics:start();
 local carGroup = display.newGroup();
 local car1;
 --local carStop = false;
 
-local left = display.newRect(0,0,20, display.contentHeight);
-local right = display.newRect(display.contentWidth-20,0,20,display.contentHeight);
+-- physics.setDrawMode("hybrid")
+
+local left = display.newRect(0,0, 110, display.actualContentHeight);
+local right = display.newRect(display.contentWidth,0 ,110,display.actualContentHeight);
 physics.addBody( left, "static" );
 physics.addBody( right, "static" );
 physics.setGravity (0,0); -- no gravity
@@ -25,7 +28,6 @@ local  function onMove(event)
 	 elseif event.phase == "moved" then
 		local x = (event.x - event.xStart) + event.target.markX;
 		event.target.x = x;
-    print ("x: ".. event.target.x .. " y: " .. event.target.y);
 
 	end
 end
@@ -73,27 +75,9 @@ local optionsCar =
   -- each map block is 533 x 533 size,
   -- Bottom one: contentWidth/2, contentWidth/2 + 530
 
-  local function carMaker()
-  car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
-  --car1:addEventListener( "touch", onMove);
-  end
-
-function carMove(event) -- move upward 10 pixel every 1/10 second
-  event.target.y = event.target.y-10;
- end
---timer.performWithDelay( 1000, car1:carMove, 20 );
-  --local function carOFF()
-  --carStop = true;
-  --end
-
---car1:addEventListener("tap", carMove);
-  --while (carStop == false) do
-  -- carMove(car1),3)
-  --carMove(car1)
-  --end
-
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+533);
+    physics.addBody(car1)
 end
 
 --local function mapMaker ()
@@ -160,6 +144,7 @@ end
 
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2);
+    physics.addBody(car1)
 
 
     car1:addEventListener( "touch", onMove);
