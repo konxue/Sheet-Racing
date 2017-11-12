@@ -117,17 +117,23 @@ function addScrollableBg()
     bg2 = display.newRect(0, 0, display.contentWidth, display.actualContentHeight)
     bg2.fill = bg2Image
     bg2.x = display.contentCenterX
-    bg2.y = display.contentCenterY - display.actualContentHeight
+    bg2.y = display.contentCenterY - display.actualContentHeight * 2
+
+    bg3 = display.newRect(0, 0, display.contentWidth, display.actualContentHeight)
+    bg3.fill = bg2Image
+    bg3.x = display.contentCenterX
+    bg3.y = display.contentCenterY - display.actualContentHeight
 end
 
-local scrollSpeed = 10
+local scrollSpeed = 25
 
 local function moveBg(dt)
     bg1.y = bg1.y + scrollSpeed * dt
     bg2.y = bg2.y + scrollSpeed * dt
+    bg3.y = bg3.y + scrollSpeed * dt
 
-    if (bg1.y - display.contentHeight/2) > display.actualContentHeight then
-      bg1:translate(0, -bg1.contentHeight * 2)
+    if (bg3.y - display.contentHeight / 2) > display.actualContentHeight then
+      bg3:translate(0, -bg2.contentHeight * 2)
     end
     if (bg2.y - display.contentHeight / 2) > display.actualContentHeight then
       bg2:translate(0, -bg2.contentHeight * 2)
