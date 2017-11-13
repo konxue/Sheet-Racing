@@ -59,22 +59,23 @@ local optionsCar =
     { x = 193, y = 39, width = 98, height = 214},   -- 1 Audi
     { x = 351, y = 33, width = 107, height = 220},  -- 2 BlackViper
     { x = 521, y = 42, width = 92, height = 218},   -- 3 OrangeCar
-    { x = 41, y = 42, width = 102, height = 207},   -- 4 Ambulance still
-    { x = 41, y = 301, width = 102, height = 207},  -- 5 Ambulance animation xxo
-    { x = 41, y = 558, width = 102, height = 207},  -- 6 Ambulance animation xox
-    { x = 193, y = 558, width = 102, height = 207}, -- 7 Ambulance animation oxx
-    { x = 660, y = 48, width = 111, height = 204},  -- 8 Blue Minitruck
-    { x = 819, y = 53, width = 93, height = 196},   -- 9 MiniVan
-    { x = 189, y = 288, width = 116, height = 234}, -- 10 Taxi
-    { x = 351, y = 305, width = 144, height = 292}, -- 11 Truck
+    { x = 660, y = 48, width = 111, height = 204},  -- 4 Blue Minitruck
+    { x = 819, y = 53, width = 93, height = 196},   -- 5 MiniVan
+    { x = 189, y = 288, width = 116, height = 234}, -- 6 Taxi
+    { x = 351, y = 305, width = 144, height = 292}, -- 7 Truck
+    { x = 41, y = 42, width = 102, height = 207},   -- 8 Ambulance still
+    { x = 41, y = 301, width = 102, height = 207},  -- 9 Ambulance animation xxo
+    { x = 41, y = 558, width = 102, height = 207},  -- 10 Ambulance animation xox
+    { x = 193, y = 558, width = 102, height = 207}, -- 11 Ambulance animation oxx
     { x = 521, y = 324, width = 98, height = 214},  -- 12 Police still
-    { x = 521, y = 358, width = 98, height = 214},  -- 13 Police Animation oxx
+    { x = 521, y = 558, width = 98, height = 214},  -- 13 Police Animation oxx
     { x = 686, y = 558, width = 98, height = 214},  -- 14 Police Animation oxo
     { x = 845, y = 558, width = 98, height = 214},  -- 15 Police Animation xxo
   }
 }
   local sheetCar = graphics.newImageSheet( "car.png", optionsCar );
-
+  local ambulanceAnimation = { name = "ambulance", start = 9, count = 3, time = 600,  loopCount = 0, loopDirection = "forward"};
+  local policeAnimation = { name = "police", start = 13, count = 3, time = 600, loopCount = 0, loopDirection = "forward"};
   -- each map block is 533 x 533 size,
   -- Bottom one: contentWidth/2, contentWidth/2 + 530
 
@@ -147,23 +148,50 @@ end
 
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+150);
-    physics.addBody(car1)
-
-
+    physics.addBody(car1, { density=100, friction=1, bounce=0.1 });
     car1:addEventListener( "touch", onMove);
 end
 
+local function enemyMaker()
+  local num = math.random(2,9);
+  local car2;
+  if num <= 7 then
+    car2 = display.newImage (sheetCar, num, display.contentWidth/2+math.random(-160,160), display.contentWidth/2-750);
+    car2.rotation = 180;
+  elseif num == 8 then
+    car2 = display.newSprite(sheetCar, ambulanceAnimation);
+    car2.x = display.contentWidth/2+math.random(-160,160);
+    car2.y = display.contentWidth/2-750;
+    car2:play();
+  elseif num == 9 then
+    car2 = display.newSprite(sheetCar, policeAnimation);
+    car2.x = display.contentWidth/2+math.random(-160,160);
+    car2.y = display.contentWidth/2-750;
+    car2:play();
+end
+    physics.addBody(car2, { density=5.0, friction=1, bounce=0.1 });
+end
+
 --mapMaker();
-init()
+-- Show countdown timer for round start
+
+init();
 carMaker();
 
 local function randomObject()
-  --timer.performWithDelay( 10000, )
+  timer.performWithDelay( 5000,
+  enemyMaker
   -- adding the objects to the screen every 10s, at random x,y
   -- adding physics to the object
   -- Make object moving downward
-
+  , 100)
 end
+randomObject();
+
+-- to do list
+-- collision handler
+-- health points + on screen text
+-- remove car after collision
 
 ---------------------------------------------------------------------------------
 
