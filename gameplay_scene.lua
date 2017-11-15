@@ -11,6 +11,7 @@ local physics = require("physics");
 physics:start();
 local carGroup = display.newGroup();
 local car1;
+local car2;
 local v = 3; -- velocity of the car
 --local carStop = false;
 
@@ -19,6 +20,8 @@ physics.setDrawMode("hybrid")
 local left = display.newRect(0,0, 110, display.actualContentHeight + 350);
 local right = display.newRect(display.contentWidth,0 ,110,display.actualContentHeight + 350);
 physics.addBody( left, "static" );
+left.myName = "Left wall";
+right.myName = "Right wall";
 physics.addBody( right, "static" );
 physics.setGravity (0,0); -- no gravity
 
@@ -85,6 +88,17 @@ local function carMaker()
     physics.addBody(car1)
 end
 
+local function onLocalCollision( self, event )
+
+    if ( event.phase == "began" ) then
+        print( self.myName .. " hits the " .. event.other.myName )
+        -- makeing sounds
+        -- do what it suppose to do, decrease hp, gain money... etc....
+    elseif ( event.phase == "ended" ) then
+        --print( "ended: " .. self.myName .. " hit the " .. event.other.myName )
+    end
+end
+
 --local function mapMaker ()
   --[[
     local map1 = display.newImage (sheetMap, 3, display.contentWidth/2, display.contentWidth/2+533);
@@ -149,11 +163,15 @@ end
 
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+150);
-    physics.addBody(car1, { density=100, friction=1, bounce=0.5 });
+    physics.addBody(car1, { density=1, friction=0.1, bounce=0.2 });
+    car1.myName = "Your car";
     car1:addEventListener( "touch", onMove);
+    car1.collision = onLocalCollision
+    car1:addEventListener( "collision" )
     function moveCar()
       car1.y = car1.y - v;
     end
+
     timer.performWithDelay( 30,
     --function ()
     moveCar
@@ -168,30 +186,57 @@ local function enemyMaker()
   if num <= 7 then
     car2 = display.newImage (sheetCar, num, display.contentWidth/2+math.random(-160,160), display.contentWidth/2+400);
     car2v = 15;
+    if num == 2 then
+      car2.myName = "BlackViper";
+    elseif num == 3 then
+      car2.myName = "OrangeCar";
+    elseif mum == 4 then
+      car2.myName = "Blue Minitruck";
+    elseif num == 5 then
+      car2.myName = "Minivan";
+    elseif num == 6 then
+      car2.myName = "Taxi";
+    elseif num == 7 then
+      car2.myName = "Truck"
+    end
   elseif num == 8 then
     car2 = display.newSprite(sheetCar, ambulanceAnimation);
     car2.x = display.contentWidth/2+math.random(-160,160);
     car2.y = display.contentWidth/2+400;
     car2v = 35;
     car2:play();
+    car2.myName = "Ambulance";
   elseif num == 9 then
     car2 = display.newSprite(sheetCar, policeAnimation);
     car2.x = display.contentWidth/2+math.random(-160,160);
     car2.y = display.contentWidth/2+400;
     car2v = 35;
     car2:play();
+    car2.myName = "Police Car";
 end
-    physics.addBody(car2, { density=0.2, friction=5, bounce=1 });
+    physics.addBody(car2, { density=1, friction=0.3, bounce=0.2 });
 
+    car2.collision = onLocalCollision
+    car2:addEventListener( "collision" )
     function moveCar2()
-      car2.y = car2.y - car2v;
+        car2.y = car2.y - car2v;
     end
     timer.performWithDelay( 30,
     --function ()
     moveCar2
   --  end
     , 100)
+    if car2.y < (display.contentWidth/2 - 100) then
+      print (car2.myName .. " is removed");
+      car2:removeSelf();
+      car2 = nil;
+    end
 end
+
+
+
+
+
 
 --mapMaker();
 -- Show countdown timer for round start
@@ -208,11 +253,17 @@ local function randomObject()
   , 100)
 end
 
+
+
 randomObject();
+
 -- to do list
 -- collision handler
 -- health points + on screen text
 -- remove car after collision
+
+
+
 
 ---------------------------------------------------------------------------------
 
