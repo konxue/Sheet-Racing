@@ -149,7 +149,7 @@ end
 
 local function carMaker()
     local car1 = display.newImage (sheetCar, 1, display.contentWidth/2, display.contentWidth/2+150);
-    physics.addBody(car1, { density=100, friction=1, bounce=0.1 });
+    physics.addBody(car1, { density=100, friction=1, bounce=0.5 });
     car1:addEventListener( "touch", onMove);
     function moveCar()
       car1.y = car1.y - v;
@@ -158,7 +158,7 @@ local function carMaker()
     --function ()
     moveCar
   --  end
-    , 100)
+    , 50)
 end
 
 local function enemyMaker()
@@ -166,20 +166,23 @@ local function enemyMaker()
   local car2;
   local car2v;
   if num <= 7 then
-    car2 = display.newImage (sheetCar, num, display.contentWidth/2+math.random(-160,160), display.contentWidth/2+200);
+    car2 = display.newImage (sheetCar, num, display.contentWidth/2+math.random(-160,160), display.contentWidth/2+400);
+    car2v = 15;
   elseif num == 8 then
     car2 = display.newSprite(sheetCar, ambulanceAnimation);
     car2.x = display.contentWidth/2+math.random(-160,160);
-    car2.y = display.contentWidth/2+200;
+    car2.y = display.contentWidth/2+400;
+    car2v = 35;
     car2:play();
   elseif num == 9 then
     car2 = display.newSprite(sheetCar, policeAnimation);
     car2.x = display.contentWidth/2+math.random(-160,160);
-    car2.y = display.contentWidth/2+200;
+    car2.y = display.contentWidth/2+400;
+    car2v = 35;
     car2:play();
 end
-    physics.addBody(car2, { density=5.0, friction=2, bounce=0.5 });
-    car2v = 30;
+    physics.addBody(car2, { density=0.2, friction=5, bounce=1 });
+
     function moveCar2()
       car2.y = car2.y - car2v;
     end
