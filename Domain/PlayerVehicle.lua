@@ -25,6 +25,42 @@ local optionsCar =
   }
 }
 
+function onDeath(event)
+  event.target.DisplayObject:removeSelf();
+  event.target.DisplayObject = nil;
+end
+
+-- Private function that handles collision events for player vehicles
+local function onCollision(event)
+  local this = event.target.pp
+  if (event.phase == "began") then
+    if (math.random(100) > this.Armor) then -- You take damage
+      this.HP = this.HP - 10;
+    else -- Armor saved you! You only lose armor, no HP
+      this.Armor = this.Armor - 1;
+    end
+
+    print(this.HP);
+
+    if (this.HP <= 0) then
+        Runtime:dispatchEvent({ name = "onDeath", target = this });
+    end
+  end
+end
+
+local function onMove(event)
+  if event.phase == "began" then
+    event.target.markX = event.target.x;
+  elseif event.phase == "moved" then
+    local x = (event.x - event.xStart) + event.target.markX;
+    if (x < 50 or x > display.contentWidth - 50) then
+      return
+    end
+    event.target.x = x;
+  end
+end
+
+-- Creates a new PlayerVehicle object.
 function PlayerVehicle:new(obj)
   local pv = obj or Vehicle:new({Score = 0})
   setmetatable( pv, self )
@@ -32,10 +68,16 @@ function PlayerVehicle:new(obj)
   return pv
 end
 
+-- Spawns the vehicle to the given x and y coordinates.
+-- Also adds the physics to the object and sets up collission events
 function Vehicle:Spawn(x, y)
   local sheetCar = graphics.newImageSheet( "car.png", optionsCar );
   self.DisplayObject = display.newImage(sheetCar, 1, x, y);
-  physics.addBody(self.DisplayObject, { density=1, friction=0.1, bounce=0.2 });
+  self.DisplayObject.pp = self; -- Parent Object
+  physics.addBody(self.DisplayObject, "kinematic", { density=1, friction=0.1, bounce=0.2 });
+  self.DisplayObject:addEventListener("collision", onCollision);
+  self.DisplayObject:addEventListener("touch", onMove);
+  Runtime:addEventListener("onDeath", onDeath);
 end
 
 return PlayerVehicle
