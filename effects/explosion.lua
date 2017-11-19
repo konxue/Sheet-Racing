@@ -9,7 +9,7 @@ local options = {
         {x = 0, y = 68, width = 58, height = 56},   -- 5
         {x = 61, y = 68, width = 60, height = 55},  -- 6
         {x = 130, y = 72, width = 55, height = 51}, -- 7
-        {x = 195, y = 74, width = 51, height = 48}  -- 8
+        {x = 195, y = 74, width = 51, height = 48} -- 8
     }
 }
 
@@ -18,7 +18,7 @@ local sheet = graphics.newImageSheet("effects/explosion.png", options);
 
 -- create new sequence data
 local sequenceData = {
-    {name = "explosion", start = 1, count = 8, time = 200, loopCount = 0}
+    {name = "explosion", start = 1, count = 8, time = 200, loopCount = 1}
 };
 
 -- create table to pass explosion info
