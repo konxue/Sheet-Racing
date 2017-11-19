@@ -1,4 +1,4 @@
-local Vehicle = require('Vehicle')
+local Vehicle = require('Domain.Vehicle')
 
 EnemyVehicle = Vehicle:new()
 

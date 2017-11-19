@@ -1,4 +1,5 @@
-local Vehicle = require('Vehicle')
+local Vehicle = require('Domain.Vehicle')
+local Physics = require('physics')
 
 PlayerVehicle = Vehicle:new()
 PlayerVehicle.Score = 0
@@ -31,9 +32,10 @@ function PlayerVehicle:new(obj)
   return pv
 end
 
-function Vehicle:Spawn(self, x, y)
+function Vehicle:Spawn(x, y)
   local sheetCar = graphics.newImageSheet( "car.png", optionsCar );
   self.DisplayObject = display.newImage(sheetCar, 1, x, y);
+  physics.addBody(self.DisplayObject, { density=1, friction=0.1, bounce=0.2 });
 end
 
 return PlayerVehicle
