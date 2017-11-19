@@ -1,4 +1,4 @@
-Vehicle = {Name = '', HP = 100, Armor = 0, Sprite = {}}
+Vehicle = {Name = '', HP = 100, Armor = 0, DisplayObject = {}}
 
 function Vehicle:new(obj)
   local v = obj or {}
