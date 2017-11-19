@@ -1,8 +1,9 @@
-local Vehicle = require('Domain.Vehicle')
-local Physics = require('physics')
+local Vehicle = require('Domain.Vehicle');
+local Explosion = require('effects.explosion');
+local Physics = require('physics');
 
-PlayerVehicle = Vehicle:new()
-PlayerVehicle.Score = 0
+PlayerVehicle = Vehicle:new();
+PlayerVehicle.Score = 0;
 
 local optionsCar =
 {
@@ -26,8 +27,21 @@ local optionsCar =
 }
 
 function onDeath(event)
-  event.target.DisplayObject:removeSelf();
-  event.target.DisplayObject = nil;
+  local explode = display.newSprite(Explosion["sheet"], Explosion["sequenceData"]);
+  explode:setSequence("explosion");
+  explode.x = event.target.DisplayObject.x;
+  explode.y = event.target.DisplayObject.y;
+  explode:play();
+
+  timer.performWithDelay(
+    200,
+    function()
+      event.target.DisplayObject:removeSelf();
+      event.target.DisplayObject = nil;
+      explode:removeSelf();
+      explode = nil;
+    end );
+
 end
 
 -- Private function that handles collision events for player vehicles
@@ -35,7 +49,7 @@ local function onCollision(event)
   local this = event.target.pp
   if (event.phase == "began") then
     if (math.random(100) > this.Armor) then -- You take damage
-      this.HP = this.HP - 10;
+      this.HP = this.HP - 100;
     else -- Armor saved you! You only lose armor, no HP
       this.Armor = this.Armor - 1;
     end
