@@ -19,15 +19,15 @@ local options = {
 };
 
 -- create new image sheet
-local sheetNpc1 = graphics.newImageSheet("npc1.png", options);
+local sheetNpc1 = graphics.newImageSheet("npc/npc1.png", options);
 local sheetNpc2 = graphics.newImageSheet("npc2.png", options);
 
 -- create new sequence data
 local sequenceData = {
-    {name = "npc1_walk_left", frames = {2, 3, 4}, time = 200, loopCount = 0},
-    {name = "npc1_walk_right", frames = {5, 6, 7}, time = 200, loopCount = 0},
-    {name = "npc2_walk_left", frames = {9, 10, 11}, time = 200, loopCount = 0},
-    {name = "npc2_walk_right", frames = {12, 13, 14}, time = 200, loopCount = 0},
+    {name = "npc1_walk_left", frames = {2, 3, 4}, time = 200, loopCount = 1},
+    {name = "npc1_walk_right", frames = {5, 6, 7}, time = 200, loopCount = 1},
+    {name = "npc2_walk_left", frames = {9, 10, 11}, time = 200, loopCount = 1},
+    {name = "npc2_walk_right", frames = {12, 13, 14}, time = 200, loopCount = 1},
 };
 
 -- create table to pass npc info
