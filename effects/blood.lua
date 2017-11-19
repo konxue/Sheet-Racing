@@ -12,11 +12,11 @@ local options = {
 };
 
 -- create new image sheet
-local sheet = graphics.newImageSheet("blood.png", options);
+local sheet = graphics.newImageSheet("effects/blood.png", options);
 
 -- create new sequence data
 local sequenceData = {
-    {name = "blood", start = 1, count = 6, time = 200, loopCount = 0}
+    {name = "blood", start = 1, count = 6, time = 200, loopCount = 1}
 };
 
 -- create table to pass blood info

@@ -1,4 +1,5 @@
 local composer = require( "composer" )
+local PlayerVehicle = require("Domain.PlayerVehicle");
 local scene = composer.newScene()
 
 ---------------------------------------------------------------------------------
@@ -219,8 +220,8 @@ local function enemyMaker()
 end
     physics.addBody(car2, { density=1, friction=0.3, bounce=0.2 });
 
-    car2.collision = onLocalCollision
-    car2:addEventListener( "collision" )
+    --car2.collision = onLocalCollision
+    --car2:addEventListener( "collision" )
     function moveCar2()
         car2.y = car2.y - car2v;
     end
@@ -245,7 +246,10 @@ end
 -- Show countdown timer for round start
 
 init();
-carMaker();
+player = PlayerVehicle:new();
+player:Spawn(display.contentWidth/2, display.contentWidth/2+150);
+--carMaker();
+
 
 local function randomObject()
   timer.performWithDelay( 5000,
