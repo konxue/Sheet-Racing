@@ -1,12 +1,12 @@
 -- TODO: Powerups
 -- TODO: Points
--- TODO: Sounds
 -- TODO: (?) Advanced damage
 
 local Vehicle = require('Domain.Vehicle');
 local Explosion = require('effects.explosion');
 local Physics = require('physics');
 local Car = require('vehicle.car');
+local soundTable = require('sounds.soundTable');
 
 PlayerVehicle = Vehicle:new();
 PlayerVehicle.Score = 0;
@@ -18,7 +18,7 @@ function onDeath(event)
   explode.x = event.target.DisplayObject.x;
   explode.y = event.target.DisplayObject.y;
   explode:play();
-
+  audio.play( soundTable["explosion"] );
   timer.performWithDelay(
     500,
     function()
@@ -34,6 +34,7 @@ end
 local function onCollision(event)
   local this = event.target.pp
   if (event.phase == "began") then
+      audio.play( soundTable["whack"] );
     if (math.random(100) > this.Armor) then -- You take damage
       this.HP = this.HP - 100;
     else -- Armor saved you! You only lose armor, no HP
