@@ -10,6 +10,7 @@ local soundTable = require('sounds.soundTable');
 
 PlayerVehicle = Vehicle:new();
 PlayerVehicle.Score = 0;
+PlayerVehicle.Type = "PlayerVehicle";
 
 -- Event handler for when the vehicle dies
 function onDeath(event)
@@ -33,15 +34,31 @@ end
 -- Private function that handles collision events for player vehicles
 local function onCollision(event)
   local this = event.target.pp
+  local that = event.other.pp
   if (event.phase == "began") then
-      audio.play( soundTable["whack"] );
+    audio.play( soundTable["whack"] );
     if (math.random(100) > this.Armor) then -- You take damage
-      this.HP = this.HP - 100;
+      this.HP = this.HP - 1;
     else -- Armor saved you! You only lose armor, no HP
       this.Armor = this.Armor - 1;
     end
 
     print(this.HP);
+
+	  if (that.Type == "Pickup") then
+        -- Handle Pickups
+        print("I ran over a pickup!");
+	  end
+
+    if (that.Type == "EnemyVehicle") then
+        -- Handle damage doing to enemy + points
+        print("I hit an enemy vehicle!");
+    end
+
+    if (that.Type == "Destructible") then
+        -- Handle adding to our score
+        print("I hit a destructible!");
+    end
 
     if (this.HP <= 0) then
         Runtime:dispatchEvent({ name = "onDeath", target = this });
@@ -72,7 +89,7 @@ end
 
 -- Spawns the vehicle to the given x and y coordinates.
 -- Also adds the physics to the object and sets up collission events
-function Vehicle:Spawn(x, y)
+function PlayerVehicle:Spawn(x, y)
   self.DisplayObject = display.newImage(Car.sheet, 1, x, y);
   self.DisplayObject.pp = self; -- Parent Object
   physics.addBody(self.DisplayObject, "kinematic", { density=1, friction=0.1, bounce=0.2 });
