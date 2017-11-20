@@ -1,4 +1,4 @@
-Destructible = {Name = '', Value = 0, Armor = 0, Sprite = {}}
+Destructible = {Name = '', Value = 0, Armor = 0, DisplayObject = {}, Type="Destructible"}
 
 function Destructible:new(obj)
   local v = obj or {}

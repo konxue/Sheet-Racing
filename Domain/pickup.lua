@@ -1,4 +1,4 @@
-Pickup = {Name = '', Harmful = false, AffectedAttribute = 'HP', Value = 0, Sprite = {}}
+Pickup = {Name = '', Harmful = false, AffectedAttribute = 'HP', Value = 0, DisplayObject = {}, Type = "Pickup"}
 
 function Pickup:new(obj)
   local v = obj or {}

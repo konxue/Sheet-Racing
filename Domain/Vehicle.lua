@@ -1,5 +1,11 @@
 Vehicle = {Name = '', HP = 100, Armor = 0, DisplayObject = {}}
 
+-- Moves the vehicle by the given offset in the given time.
+function Vehicle:Move(deltaX, deltaY, t)
+    transition.to(self.DisplayObject, {x = self.DisplayObject.x + deltaX, y = self.DisplayObject.y + deltaY, time=t});
+end
+
+-- Initializes a new Vehicle object
 function Vehicle:new(obj)
   local v = obj or {}
   setmetatable( v, self )
