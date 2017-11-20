@@ -18,7 +18,7 @@ local sheet = graphics.newImageSheet("effects/explosion.png", options);
 
 -- create new sequence data
 local sequenceData = {
-    {name = "explosion", start = 1, count = 8, time = 200, loopCount = 1}
+    {name = "explosion", start = 1, count = 8, time = 500, loopCount = 1}
 };
 
 -- create table to pass explosion info

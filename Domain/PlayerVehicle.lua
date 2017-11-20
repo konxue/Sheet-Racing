@@ -1,31 +1,17 @@
+-- TODO: Powerups
+-- TODO: Points
+-- TODO: Sounds
+-- TODO: (?) Advanced damage
+
 local Vehicle = require('Domain.Vehicle');
 local Explosion = require('effects.explosion');
 local Physics = require('physics');
+local Car = require('vehicle.car');
 
 PlayerVehicle = Vehicle:new();
 PlayerVehicle.Score = 0;
 
-local optionsCar =
-{
-  frames = {
-    { x = 193, y = 39, width = 98, height = 214},   -- 1 Audi
-    { x = 351, y = 33, width = 107, height = 220},  -- 2 BlackViper
-    { x = 521, y = 42, width = 92, height = 218},   -- 3 OrangeCar
-    { x = 660, y = 48, width = 111, height = 204},  -- 4 Blue Minitruck
-    { x = 819, y = 53, width = 93, height = 196},   -- 5 MiniVan
-    { x = 189, y = 288, width = 116, height = 234}, -- 6 Taxi
-    { x = 351, y = 305, width = 144, height = 292}, -- 7 Truck
-    { x = 41, y = 42, width = 102, height = 207},   -- 8 Ambulance still
-    { x = 41, y = 301, width = 102, height = 207},  -- 9 Ambulance animation xxo
-    { x = 41, y = 558, width = 102, height = 207},  -- 10 Ambulance animation xox
-    { x = 193, y = 558, width = 102, height = 207}, -- 11 Ambulance animation oxx
-    { x = 521, y = 324, width = 98, height = 214},  -- 12 Police still
-    { x = 521, y = 558, width = 98, height = 214},  -- 13 Police Animation oxx
-    { x = 686, y = 558, width = 98, height = 214},  -- 14 Police Animation oxo
-    { x = 845, y = 558, width = 98, height = 214},  -- 15 Police Animation xxo
-  }
-}
-
+-- Event handler for when the vehicle dies
 function onDeath(event)
   local explode = display.newSprite(Explosion["sheet"], Explosion["sequenceData"]);
   explode:setSequence("explosion");
@@ -34,7 +20,7 @@ function onDeath(event)
   explode:play();
 
   timer.performWithDelay(
-    200,
+    500,
     function()
       event.target.DisplayObject:removeSelf();
       event.target.DisplayObject = nil;
@@ -62,6 +48,7 @@ local function onCollision(event)
   end
 end
 
+-- Allows you to move the car with touch!
 local function onMove(event)
   if event.phase == "began" then
     event.target.markX = event.target.x;
@@ -85,8 +72,7 @@ end
 -- Spawns the vehicle to the given x and y coordinates.
 -- Also adds the physics to the object and sets up collission events
 function Vehicle:Spawn(x, y)
-  local sheetCar = graphics.newImageSheet( "car.png", optionsCar );
-  self.DisplayObject = display.newImage(sheetCar, 1, x, y);
+  self.DisplayObject = display.newImage(Car.sheet, 1, x, y);
   self.DisplayObject.pp = self; -- Parent Object
   physics.addBody(self.DisplayObject, "kinematic", { density=1, friction=0.1, bounce=0.2 });
   self.DisplayObject:addEventListener("collision", onCollision);

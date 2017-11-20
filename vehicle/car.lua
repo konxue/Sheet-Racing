@@ -21,11 +21,11 @@ local options =
   }
 }
 -- create new image sheet
-local sheet = graphics.newImageSheet( "car.png", options );
+local sheet = graphics.newImageSheet( "vehicle/car.png", options );
 -- create new sequence data
 local sequenceData = {
-  { name = "ambulance", start = 9, count = 3, time = 600,  loopCount = 0, loopDirection = "forward"},
-    name = "police", start = 13, count = 3, time = 600, loopCount = 0, loopDirection = "forward"}
+	{ name = "ambulance", start = 9, count = 3, time = 600,  loopCount = 0, loopDirection = "forward"},
+	{ name = "police", start = 13, count = 3, time = 600, loopCount = 0, loopDirection = "forward"}
   };
 
 -- create table to pass vehicles info
