@@ -1,6 +1,6 @@
 
 -- create squirrel options
-local optionsSquirrel =
+local options =
 {
   frames = {
     { x = 19, y = 22, width = 53, height = 62}, -- 1 standing squirrel
@@ -15,7 +15,7 @@ local optionsSquirrel =
   }
 }
 -- create new image sheet
-local sheet = graphics.newImageSheet( "squirrel.png", options);
+local sheet = graphics.newImageSheet( "npc/squirrel.png", options);
 
 -- create new squence sequence for animation
 local sequenceData = { name ="squirrel", start = 2, count = 8, time = 1000, loopCount = 0, loopDirection = "forward"}

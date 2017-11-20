@@ -1,6 +1,9 @@
 local composer = require( "composer" )
 local PlayerVehicle = require("Domain.PlayerVehicle");
+local soundTable = require('sounds.soundTable');
 local Car = require("vehicle.Car");
+local NPC = require("npc.npc");
+local SQUIRREL = require("npc.squirrel");
 local scene = composer.newScene()
 
 ---------------------------------------------------------------------------------
@@ -46,14 +49,15 @@ local function carMaker()
     physics.addBody(car1)
 end
 
-local function onLocalCollision( self, event )
+local function onLocalCollision( event )
 
     if ( event.phase == "began" ) then
-        print( self.myName .. " hits the " .. event.other.myName )
-        -- makeing sounds
+      --blood animation
+      event.target:removeSelf();
+      event.target = nil;
+        --print( event.target.myName .. " got hit by " .. event.other.myName )
+      --  audio.play( soundTable["hurt"] );
         -- do what it suppose to do, decrease hp, gain money... etc....
-    elseif ( event.phase == "ended" ) then
-        --print( "ended: " .. self.myName .. " hit the " .. event.other.myName )
     end
 end
 
@@ -179,16 +183,60 @@ end
     --function ()
     moveCar2
   --  end
-    , 100)
-    if car2.y < (display.contentWidth/2 - 100) then
-      print (car2.myName .. " is removed");
+    , 100);
+    timer.performWithDelay( 8000, function()
       car2:removeSelf();
       car2 = nil;
-    end
+      end);
 end
 
 
+local function objectMaker()
+    local num = math.random(0,4);
+    local object1v = 1;
+    local object1;
+    if num < 4 then
+      if num == 0 then
+        object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData);
+        object1:setSequence("npc1_walk_left");
+        object1.myName = "NPC1 left";
+      elseif num == 1 then
+        object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData);
+        object1:setSequence("npc1_walk_right");
+        object1.myName = "NPC1 right";
+      elseif num == 2 then
+        object1 = display.newSprite(NPC.sheetNpc2, NPC.sequenceData);
+        object1:setSequence("npc2_walk_left");
+        object1.myName = "NPC2 left";
+      elseif num == 3 then
+        object1 = display.newSprite(NPC.sheetNpc2, NPC.sequenceData);
+        object1:setSequence("npc2_walk_right");
+        object1.myName = "NPC2 right";
+      end
+    else
+      object1 = display.newSprite(SQUIRREL.sheet, SQUIRREL.sequenceData);
+      object1:setSequence("squirrel");
+      object1.myName = "squirrel";
+    end
+      object1.x = display.contentWidth/2 + math.random(-50,50);
+      object1.y = display.contentWidth/2 - 700;
+      object1:play();
+      physics.addBody(object1, { density=1, friction=0.3, bounce=0.2 });
+      object1:addEventListener("collision", onLocalCollision);
 
+      timer.performWithDelay( 30,
+      function ()
+        if object1 ~= nil then
+          if num == 1 or num == 3 then
+            object1.x = object1.x + object1v;
+          elseif num == 2 or num == 4 then
+            object1.x = object1.x - object1v;
+          end
+          object1.y = object1.y + object1v*10;
+        end
+      end
+    , 80)
+end
 
 
 
@@ -203,11 +251,14 @@ player:Spawn(display.contentWidth/2, display.contentWidth/2+150);
 
 local function randomObject()
   timer.performWithDelay( 5000,
-  enemyMaker
+  function ()
+  enemyMaker();
+  objectMaker();
+  end
   -- adding the objects to the screen every 10s, at random x,y
   -- adding physics to the object
   -- Make object moving downward
-  , 100)
+  , 100);
 end
 
 
