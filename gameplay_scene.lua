@@ -54,7 +54,7 @@ local function onLocalCollision( event )
     if ( event.phase == "began" ) then
       --blood animation
       event.target:removeSelf();
-      event.target = nil;
+      --event.target = nil;
         --print( event.target.myName .. " got hit by " .. event.other.myName )
       --  audio.play( soundTable["hurt"] );
         -- do what it suppose to do, decrease hp, gain money... etc....
@@ -193,7 +193,7 @@ end
 
 local function objectMaker()
     local num = math.random(0,4);
-    local object1v = 1;
+    local object1v = 5;
     local object1;
     if num < 4 then
       if num == 0 then
@@ -219,12 +219,12 @@ local function objectMaker()
       object1.myName = "squirrel";
     end
       object1.x = display.contentWidth/2 + math.random(-50,50);
-      object1.y = display.contentWidth/2 - 700;
+      object1.y = display.contentWidth/2 - 800;
       object1:play();
       physics.addBody(object1, { density=1, friction=0.3, bounce=0.2 });
       object1:addEventListener("collision", onLocalCollision);
-
-      timer.performWithDelay( 30,
+      -- error occured on collision, object is deleted by removeself in the onLocalCollision, but it still change its x, y to make it moves.
+      timer.performWithDelay( 50,
       function ()
         if object1 ~= nil then
           if num == 1 or num == 3 then
@@ -232,10 +232,10 @@ local function objectMaker()
           elseif num == 2 or num == 4 then
             object1.x = object1.x - object1v;
           end
-          object1.y = object1.y + object1v*10;
+          object1.y = object1.y + object1v*3;
         end
       end
-    , 80)
+    , 50)
 end
 
 
@@ -253,7 +253,9 @@ local function randomObject()
   timer.performWithDelay( 5000,
   function ()
   enemyMaker();
+  if math.random(0,100) < 50 then
   objectMaker();
+  end
   end
   -- adding the objects to the screen every 10s, at random x,y
   -- adding physics to the object
