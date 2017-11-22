@@ -321,7 +321,11 @@ function moveBg()
 
     if scrollSpeed > 0 then
         for i, v in ipairs(dests) do
-            v.SpeedY = scrollSpeed
+            v.SpeedY = scrollSpeed * 2
+        end
+    else
+        for i, v in ipairs(dests) do
+            v.SpeedY = 0
         end
     end
     -- translate each background

@@ -21,7 +21,7 @@ function Destructible:new(obj)
 end
 
 -- Event handler for when the vehicle dies
-function onDeath(event)
+function onDestruct(event)
     audio.play(soundTable["hurt"])
     local blood = display.newSprite(Blood["sheet"], Blood["sequenceData"])
     blood:setSequence("blood")
@@ -55,7 +55,7 @@ local function onCollision(event)
 
         if (this.HP <= 0) then
             transition.cancel(this.DisplayObject)
-            this.DisplayObject:dispatchEvent({name = "onDeath", target = this})
+            this.DisplayObject:dispatchEvent({name = "onDestruct", target = this})
         end
     end
 end
@@ -81,7 +81,7 @@ function Destructible:Move()
     if x < 0 or x > display.contentWidth then
         transition.cancel(self.DisplayObject)
         self.DisplayObject:removeEventListener("collision", onCollision)
-        self.DisplayObject:removeEventListener("onDeath", onDeath)
+        self.DisplayObject:removeEventListener("onDestruct", onDestruct)
         display.remove(self.DisplayObject)
         self.DisplayObject = nil
         return
@@ -103,8 +103,8 @@ end
 -- Spawns the destructibles to the given x and y coordinates.
 -- Also adds the physics to the object
 function Destructible:SpawnRandom(x, y)
-    local num = math.random(0, 5)
-    local object1
+    local num = math.random(0, 5);
+    local object1;
     if num < 4 then
         if num == 0 then
             object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
@@ -148,7 +148,7 @@ function Destructible:SpawnRandom(x, y)
     self.DisplayObject.pp = self -- Parent Object
     physics.addBody(self.DisplayObject, {isSensor = true})
     self.DisplayObject:addEventListener("collision", onCollision)
-    self.DisplayObject:addEventListener("onDeath", onDeath)
+    self.DisplayObject:addEventListener("onDestruct", onDestruct)
     self.DisplayObject:toBack()
     self:Move()
 end
