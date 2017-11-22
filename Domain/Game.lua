@@ -297,15 +297,13 @@ end
 function Game:createDest(sceneGroup)
     destTimerRef =
         timer.performWithDelay(
-        5000,
+        math.random(3000, 6000),
         function()
             -- generate random number of npc's
-            for i = 1, math.random(2) do
                 local d = Destructible:new()
-                d:SpawnRandom(0, -math.random(250, 400))
+                d:SpawnRandom(math.random(-100,100), -math.random(200, 300))
                 sceneGroup:insert(d.DisplayObject)
                 table.insert(dests, d)
-            end
         end,
         -1
     )
@@ -322,7 +320,7 @@ function moveBg()
 
     if scrollSpeed > 0 then
         for i, v in ipairs(dests) do
-            v.SpeedY = scrollSpeed * 2
+            v.SpeedY = scrollSpeed
         end
     end
     -- translate each background

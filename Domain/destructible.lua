@@ -22,7 +22,9 @@ end
 
 -- Event handler for when the vehicle dies
 function onDestruct(event)
-    audio.play(soundTable["hurt"])
+    timer.performWithDelay( 500, function()
+      audio.play(soundTable["hurt"]);
+    end);
     local blood = display.newSprite(Blood["sheet"], Blood["sequenceData"])
     blood:setSequence("blood")
     blood.x = event.target.DisplayObject.x
@@ -103,7 +105,7 @@ end
 -- Spawns the destructibles to the given x and y coordinates.
 -- Also adds the physics to the object
 function Destructible:SpawnRandom(x, y)
-    local num = math.random(0, 5);
+    local num = math.random(0, 7);
     local object1;
     if num < 4 then
         if num == 0 then
@@ -127,21 +129,25 @@ function Destructible:SpawnRandom(x, y)
             object1.direction = "right"
             object1.x = 0
         end
-    else
+    elseif num == 4 then
         object1 = display.newSprite(SQUIRREL.sheet, SQUIRREL.sequenceData)
         object1:setSequence("squirrel")
         object1.direction = "left"
         object1.x = display.contentWidth
+    elseif num == 5 then
+      object1 = display.newImage(NPC.sheetNpc1, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.SpeedX = 0;
+    elseif num == 6 then
+      object1 = display.newImage(NPC.sheetNpc2, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.SpeedX = 0;
+    elseif num == 7 then
+      object1 = display.newImage(SQUIRREL.sheet, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.SpeedX = 0;
     end
-    object1.y = y
 
-		-- randomly put one in the middle of the road
-    if math.random() > 0.3333 then
-				object1:play()
-		else
-				self.SpeedX = 0
-				object1.x = display.contentWidth / 2
-				object1.y = -400
+    if num < 5 then
+      object1:play()
+      object1.y = y
     end
 
     self.DisplayObject = object1
