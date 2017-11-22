@@ -8,7 +8,8 @@ Vehicle = {
     RRatio = 0.09,
     TurnRatio = 1.2,
     MoveTime = 200,
-    DmgRatio = 2
+    DmgRatio = 2,
+    SpeedInc = 5
 }
 
 -- Moves the vehicle by the given offset in the given time.

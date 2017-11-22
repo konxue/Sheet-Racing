@@ -22,7 +22,6 @@ function onDeath(event)
     explode.y = event.target.DisplayObject.y
     explode:play()
     audio.play(soundTable["explosion"])
-    event.target.pp.Score = event.target.pp.Score + event.other.pp.Value -- increase players score
     timer.performWithDelay(
         500,
         function()
@@ -63,7 +62,14 @@ local function onCollision(event)
             end
         end
 
+        -- slow down vehicle
+        this.Speed = this.Speed - this.SpeedInc
+
         if (this.HP <= 0) then
+            if that.Type == "PlayerVehicle" then
+                that.Score = that.Score + this.Value -- increase players score
+            end
+
             this:Stop()
             this.DisplayObject:dispatchEvent({name = "onDeath", target = this})
         end
