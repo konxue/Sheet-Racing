@@ -104,7 +104,6 @@ function onKey(event)
     if event.phase == "down" then
         -- get key
         local key = event.keyName
-        print(key)
         if key == "up" then
             -- increase player speed
             Runtime:dispatchEvent({name = "onMove", direction = "up"})
