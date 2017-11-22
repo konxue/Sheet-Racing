@@ -91,7 +91,6 @@ function EnemyVehicle:Start()
     function()
         dv = self.Player.Speed - self.Speed;
         dt = (1000 / 60);
-        print(dv);
         self:Move(0, dv, dt);
     end,
     -1);
