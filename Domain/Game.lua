@@ -324,6 +324,10 @@ function moveBg()
         for i, v in ipairs(dests) do
             v.SpeedY = scrollSpeed * 2
         end
+    else
+        for i, v in ipairs(dests) do
+            v.SpeedY = 0
+        end
     end
     -- translate each background
     if (bg3.y - display.contentHeight / 2) > display.actualContentHeight then
