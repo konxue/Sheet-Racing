@@ -103,8 +103,8 @@ end
 -- Spawns the destructibles to the given x and y coordinates.
 -- Also adds the physics to the object
 function Destructible:SpawnRandom(x, y)
-    local num = math.random(0, 5)
-    local object1
+    local num = math.random(0, 5);
+    local object1;
     if num < 4 then
         if num == 0 then
             object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
