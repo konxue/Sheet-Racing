@@ -296,7 +296,7 @@ end
 function Game:createDest(sceneGroup)
     destTimerRef =
         timer.performWithDelay(
-        math.random(3000, 6000),
+        math.random(2000, 6000),
         function()
             -- generate random number of npc's
                 local d = Destructible:new()
