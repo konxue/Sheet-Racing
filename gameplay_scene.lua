@@ -17,7 +17,7 @@ local Game = require("Domain.Game")
 -- start and setup physics
 physics:start()
 physics.setDrawMode("hybrid")
-physics.setGravity (0,0); -- no gravity
+physics.setGravity(0, 0) -- no gravity
 
 local game
 -- local carGroup = display.newGroup();
@@ -32,7 +32,6 @@ local game
 -- left.myName = "Left wall";
 -- right.myName = "Right wall";
 -- physics.addBody( right, "static" );
-
 
 -- -- this function will handle the moving of the fish
 -- local  function onMove(event)
@@ -292,10 +291,8 @@ function scene:show(event)
     if (phase == "will") then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif (phase == "did") then
-        
-      -- start game
-        game:start();
-
+        -- start game
+        game:start(sceneGroup)
     end
 end
 
@@ -305,9 +302,8 @@ function scene:hide(event)
     local phase = event.phase
 
     if (phase == "will") then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
+        -- stop game
+        game:stop()
     elseif (phase == "did") then
     -- Called immediately after scene goes off screen.
     end

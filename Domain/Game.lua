@@ -1,5 +1,6 @@
 local Player = require("Domain.PlayerVehicle")
 local Enemy = require("Domain.EnemyVehicle")
+local Destructible = require("Domain.destructible")
 local Widget = require("widget")
 local Game = {}
 local p
@@ -9,6 +10,7 @@ local speedInc = 5
 local pStatText
 local statFormat = "AR: %d | HP: %d | SP: %d | SC: %d"
 local enemies = {}
+local dests = {}
 local enemyCount = 4
 local startPos = {
     {x = 140, y = 462}, -- 1 postion
@@ -16,6 +18,7 @@ local startPos = {
     {x = 460, y = 113}, -- 3 postion
     {x = 460, y = 456} -- 4 postion
 }
+local destTimerRef
 
 -- Initializes a new instance of the Game class.
 function Game:new(obj)
@@ -290,6 +293,24 @@ function Game:create(sceneGroup)
     self:createEnemies(sceneGroup)
 end
 
+-- Create destructables randomly.
+function Game:createDest(sceneGroup)
+    destTimerRef =
+        timer.performWithDelay(
+        5000,
+        function()
+            -- generate random number of npc's
+            for i = 1, math.random(2) do
+                local d = Destructible:new()
+                d:SpawnRandom(0, -math.random(250, 400))
+                sceneGroup:insert(d.DisplayObject)
+                table.insert(dests, d)
+            end
+        end,
+        -1
+    )
+end
+
 -- This function will move the background based on the delta game time.
 function moveBg()
     local scrollSpeed = p.Speed
@@ -299,6 +320,11 @@ function moveBg()
     bg2.y = bg2.y + scrollSpeed * deltaTime
     bg3.y = bg3.y + scrollSpeed * deltaTime
 
+    if scrollSpeed > 0 then
+        for i, v in ipairs(dests) do
+            v.SpeedY = scrollSpeed
+        end
+    end
     -- translate each background
     if (bg3.y - display.contentHeight / 2) > display.actualContentHeight then
         bg3:translate(0, -bg2.contentHeight * 2)
@@ -309,7 +335,7 @@ function moveBg()
 end
 
 -- Start game play.
-function Game:start()
+function Game:start(sceneGroup)
     -- add move background event
     Runtime:addEventListener("enterFrame", moveBg)
 
@@ -324,6 +350,29 @@ function Game:start()
 
     -- start enemies
     startEnemies()
+
+    -- start creating destructibles
+    self:createDest(sceneGroup)
+end
+
+-- This function will stop the game
+function Game:stop()
+    -- stop destructible timer
+    if destTimerRef ~= nil then
+        timer.cancel(destTimerRef)
+    end
+
+    -- remove move background event
+    Runtime:removeEventListener("enterFrame", moveBg)
+
+    -- remove keyboard event
+    Runtime:removeEventListener("key", onKey)
+
+    -- remove custom on move event
+    Runtime:removeEventListener("onMove", onMove)
+
+    -- remove custom player stat changed event
+    Runtime:removeEventListener("onPlayerStatChanged", onPlayerStatChanged)
 end
 
 return Game

@@ -1,10 +1,156 @@
-Destructible = {Name = '', Value = 0, Armor = 0, DisplayObject = {}, Type="Destructible"}
+local NPC = require("npc.npc")
+local SQUIRREL = require("npc.squirrel")
+local Blood = require("effects.blood")
+local soundTable = require("sounds.soundTable")
+local Destructible = {
+    Name = "",
+    Value = 1,
+    Armor = 0,
+    DisplayObject = {},
+    HP = 1,
+    Type = "Destructible",
+    SpeedX = 10,
+    SpeedY = 0
+}
 
 function Destructible:new(obj)
-  local v = obj or {}
-  setmetatable( v, self )
-  self.__index = self
-  return v
+    local v = obj or {}
+    setmetatable(v, self)
+    self.__index = self
+    return v
+end
+
+-- Event handler for when the vehicle dies
+function onDeath(event)
+    audio.play(soundTable["hurt"])
+    local blood = display.newSprite(Blood["sheet"], Blood["sequenceData"])
+    blood:setSequence("blood")
+    blood.x = event.target.DisplayObject.x
+    blood.y = event.target.DisplayObject.y
+    display.remove(event.target.DisplayObject)
+    event.target.DisplayObject = nil
+    blood:play()
+    timer.performWithDelay(
+        200,
+        function()
+            blood:removeSelf()
+            blood = nil
+        end,
+        1
+    )
+end
+
+-- Private function that handles collision events for destructibles.
+local function onCollision(event)
+    local this = event.target.pp
+    local that = event.other.pp
+    if (event.phase == "began") then
+        if (that.Type == "PlayerVehicle") then
+            this.HP = this.HP - 1 -- reduce destructible health
+            that.Score = that.Score + this.Value -- increase players score
+        end
+        if (that.Type == "EnemyVehicle") then
+            this.HP = this.HP - 1
+        end
+
+        if (this.HP <= 0) then
+            transition.cancel(this.DisplayObject)
+            this.DisplayObject:dispatchEvent({name = "onDeath", target = this})
+        end
+    end
+end
+
+-- This function will move the destructible.
+function Destructible:Move()
+    if self.DisplayObject == nil then
+        return
+    end
+
+    local x = 0
+    local y = 0
+
+    -- walk based on the direction
+    if self.DisplayObject.direction == "left" then
+        x = self.DisplayObject.x - self.SpeedX
+    else
+        x = self.DisplayObject.x + self.SpeedX
+    end
+    y = self.DisplayObject.y + self.SpeedY
+
+    -- we walked off screen, so remove thyself
+    if x < 0 or x > display.contentWidth then
+        transition.cancel(self.DisplayObject)
+        self.DisplayObject:removeEventListener("collision", onCollision)
+        self.DisplayObject:removeEventListener("onDeath", onDeath)
+        display.remove(self.DisplayObject)
+        self.DisplayObject = nil
+        return
+    end
+
+    transition.to(
+        self.DisplayObject,
+        {
+            time = 100,
+            x = x,
+            y = y,
+            onComplete = function()
+                self:Move()
+            end
+        }
+    )
+end
+
+-- Spawns the destructibles to the given x and y coordinates.
+-- Also adds the physics to the object
+function Destructible:SpawnRandom(x, y)
+    local num = math.random(0, 5)
+    local object1
+    if num < 4 then
+        if num == 0 then
+            object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
+            object1:setSequence("npc1_walk_left")
+            object1.direction = "left"
+            object1.x = display.contentWidth
+        elseif num == 1 then
+            object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
+            object1:setSequence("npc1_walk_right")
+            object1.direction = "right"
+            object1.x = 0
+        elseif num == 2 then
+            object1 = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
+            object1:setSequence("npc2_walk_left")
+            object1.direction = "left"
+            object1.x = display.contentWidth
+        elseif num == 3 then
+            object1 = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
+            object1:setSequence("npc2_walk_right")
+            object1.direction = "right"
+            object1.x = 0
+        end
+    else
+        object1 = display.newSprite(SQUIRREL.sheet, SQUIRREL.sequenceData)
+        object1:setSequence("squirrel")
+        object1.direction = "left"
+        object1.x = display.contentWidth
+    end
+    object1.y = y
+
+		-- randomly put one in the middle of the road
+    if math.random() > 0.3333 then
+				object1:play()
+		else
+				self.SpeedX = 0
+				object1.x = display.contentWidth / 2
+				object1.y = -400
+    end
+
+    self.DisplayObject = object1
+    self.DisplayObject.pp = self -- Parent Object
+    physics.addBody(self.DisplayObject, {isSensor = true})
+    self.DisplayObject:addEventListener("collision", onCollision)
+    self.DisplayObject:addEventListener("onDeath", onDeath)
+    self.DisplayObject:toBack()
+    self:Move()
 end
 
 return Destructible

@@ -3,7 +3,7 @@ local Car = require("vehicle.car")
 local Explosion = require("effects.explosion")
 local soundTable = require("sounds.soundTable")
 
-EnemyVehicle = Vehicle:new({HP = 10, TopSpeed = 50})
+EnemyVehicle = Vehicle:new({HP = 10, TopSpeed = 50, Value = 5})
 EnemyVehicle.Type = "EnemyVehicle"
 
 -- Initializes a new EnemyVehicle object.
@@ -44,6 +44,7 @@ local function onCollision(event)
             else -- Armor saved enemy! enemy only lose armor, no HP
                 this.Armor = this.Armor - 1
             end
+            that.Score = that.Score + 1 -- increase players score
         end
 
         if (that.Type == "EnemyVehicle" or that.Type == "Wall") then
@@ -56,6 +57,7 @@ local function onCollision(event)
 
         if (this.HP <= 0) then
             this.DisplayObject:dispatchEvent({name = "onDeath", target = this})
+            that.Score = that.Score + this.Value -- increase players score
         end
     end
 end
