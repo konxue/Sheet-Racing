@@ -3,7 +3,7 @@ local Car = require("vehicle.car")
 local Explosion = require("effects.explosion")
 local soundTable = require("sounds.soundTable")
 
-EnemyVehicle = Vehicle:new({HP = 10, TopSpeed = 50, Value = 5})
+EnemyVehicle = Vehicle:new({HP = 10, TopSpeed = 99, Value = 5})
 EnemyVehicle.Type = "EnemyVehicle"
 
 -- Initializes a new EnemyVehicle object.
@@ -22,6 +22,7 @@ function onDeath(event)
     explode.y = event.target.DisplayObject.y
     explode:play()
     audio.play(soundTable["explosion"])
+    event.target.pp.Score = event.target.pp.Score + event.other.pp.Value -- increase players score
     timer.performWithDelay(
         500,
         function()
@@ -36,7 +37,7 @@ end
 -- Stops all AI functionality
 function EnemyVehicle:Stop()
     if self.moveTimer ~= nil then
-        timer.cancel(self.moveTimer);
+        timer.cancel(self.moveTimer)
     end
 end
 
@@ -63,9 +64,8 @@ local function onCollision(event)
         end
 
         if (this.HP <= 0) then
-            this:Stop();
+            this:Stop()
             this.DisplayObject:dispatchEvent({name = "onDeath", target = this})
-            that.Score = that.Score + this.Value -- increase players score
         end
     end
 end
@@ -83,18 +83,20 @@ end
 
 -- this function will start the enemy car moving.
 function EnemyVehicle:Start()
-    self.Speed = 25;
+    transition.to(self, {time = 10000, Speed = self.TopSpeed, transition = easing.outBreak})
 
     -- Calculate the difference of speed
-    self.moveTimer = timer.performWithDelay(
-    1/60 * 1000,
-    function()
-        dv = self.Player.Speed - self.Speed;
-        dt = (1000 / 60);
-        print(dv);
-        self:Move(0, dv, dt);
-    end,
-    -1);
+    self.moveTimer =
+        timer.performWithDelay(
+        1 / 60 * 1000,
+        function()
+            dv = self.Player.Speed - self.Speed
+            dt = (1000 / 60)
+            print(dv)
+            self:Move(0, dv, dt)
+        end,
+        -1
+    )
 end
 
 return EnemyVehicle
