@@ -23,7 +23,7 @@ function onDeath(event)
   timer.performWithDelay(
     500,
     function()
-      event.target.DisplayObject:removeSelf();
+      display.remove(event.target.DisplayObject);
       event.target.DisplayObject = nil;
       explode:removeSelf();
       explode = nil;
@@ -44,6 +44,9 @@ local function onCollision(event)
     end
 
     print(this.HP);
+
+    -- send player stat change event
+    Runtime:dispatchEvent({name = "onPlayerStatChanged"})
 
 	  if (that.Type == "Pickup") then
         -- Handle Pickups
@@ -66,35 +69,21 @@ local function onCollision(event)
   end
 end
 
--- Allows you to move the car with touch!
-local function onMove(event)
-  if event.phase == "began" then
-    event.target.markX = event.target.x;
-  elseif event.phase == "moved" then
-    local x = (event.x - event.xStart) + event.target.markX;
-    if (x < 50 or x > display.contentWidth - 50) then
-      return
-    end
-    event.target.x = x;
-  end
-end
-
 -- Creates a new PlayerVehicle object.
 function PlayerVehicle:new(obj)
-  local pv = obj or Vehicle:new({Score = 0})
+  local pv = obj or {};
   setmetatable( pv, self )
   self.__index = self;
   return pv
 end
 
 -- Spawns the vehicle to the given x and y coordinates.
--- Also adds the physics to the object and sets up collission events
+-- Also adds the physics to the object and sets up collision events
 function PlayerVehicle:Spawn(x, y)
   self.DisplayObject = display.newImage(Car.sheet, 1, x, y);
   self.DisplayObject.pp = self; -- Parent Object
   physics.addBody(self.DisplayObject, "kinematic", { density=1, friction=0.1, bounce=0.2 });
   self.DisplayObject:addEventListener("collision", onCollision);
-  self.DisplayObject:addEventListener("touch", onMove);
   Runtime:addEventListener("onDeath", onDeath);
 end
 

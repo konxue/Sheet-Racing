@@ -21,7 +21,7 @@ local options =
   }
 }
 -- create new image sheet
-local sheet = graphics.newImageSheet( "vehicle/car.png", options );
+local sheet = graphics.newImageSheet( "vehicle/Car.png", options );
 -- create new sequence data
 local sequenceData = {
 	{ name = "ambulance", start = 9, count = 3, time = 600,  loopCount = 0, loopDirection = "forward"},
