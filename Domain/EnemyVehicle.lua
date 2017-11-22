@@ -33,6 +33,13 @@ function onDeath(event)
     )
 end
 
+-- Stops all AI functionality
+function EnemyVehicle:Stop()
+    if self.moveTimer ~= nil then
+        timer.cancel(self.moveTimer);
+    end
+end
+
 -- Private function that handles collision events for enemy vehicles
 local function onCollision(event)
     local this = event.target.pp
@@ -56,6 +63,7 @@ local function onCollision(event)
         end
 
         if (this.HP <= 0) then
+            this:Stop();
             this.DisplayObject:dispatchEvent({name = "onDeath", target = this})
             that.Score = that.Score + this.Value -- increase players score
         end
@@ -75,7 +83,17 @@ end
 
 -- this function will start the enemy car moving.
 function EnemyVehicle:Start()
-    
+    self.Speed = 25;
+
+    -- Calculate the difference of speed
+    self.moveTimer = timer.performWithDelay(
+    1/60 * 1000,
+    function()
+        dv = self.Player.Speed - self.Speed;
+        dt = (1000 / 60);
+        self:Move(0, dv, dt);
+    end,
+    -1);
 end
 
 return EnemyVehicle

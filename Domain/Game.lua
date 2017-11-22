@@ -104,7 +104,6 @@ function onKey(event)
     if event.phase == "down" then
         -- get key
         local key = event.keyName
-        print(key)
         if key == "up" then
             -- increase player speed
             Runtime:dispatchEvent({name = "onMove", direction = "up"})
@@ -321,6 +320,10 @@ function moveBg()
     if scrollSpeed > 0 then
         for i, v in ipairs(dests) do
             v.SpeedY = scrollSpeed
+        end
+    else
+        for i, v in ipairs(dests) do
+            v.SpeedY = 0
         end
     end
     -- translate each background
