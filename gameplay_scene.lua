@@ -16,7 +16,6 @@ local Game = require("Domain.Game")
 
 -- start and setup physics
 physics:start()
-physics.setDrawMode("hybrid")
 physics.setGravity(0, 0) -- no gravity
 
 -- game class
