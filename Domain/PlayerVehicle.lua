@@ -44,8 +44,9 @@ local function onCollision(event)
         end
 
         -- slow down vehicle
+        if (this.Speed > 0) then
         this.Speed = this.Speed - this.SpeedInc
-
+        end
         -- send player stat change event
         Runtime:dispatchEvent({name = "onPlayerStatChanged"})
 

@@ -23,7 +23,7 @@ end
 -- Event handler for when the vehicle dies
 function onDestruct(event)
     if (event.target.DisplayObject.Type == "human") then
-      audio.play(soundTable["hurt"]);
+      timer.performWithDelay( 1000, audio.play(soundTable["hurt"]));
       local blood = display.newSprite(Blood["sheet"], Blood["sequenceData"])
       blood:setSequence("blood")
       blood.x = event.target.DisplayObject.x
@@ -40,7 +40,7 @@ function onDestruct(event)
           1
       )
     elseif (event.target.DisplayObject.Type == "squirrel") then
-      audio.play(soundTable["hp"]);
+      timer.performWithDelay( 1000, audio.play(soundTable["hp"]));
       local HPpowerup = display.newImage("effects/hp.png", event.target.DisplayObject.x, event.target.DisplayObject.y);
       display.remove(event.target.DisplayObject);
       event.target.DisplayObject = nil;
@@ -163,20 +163,20 @@ function Destructible:SpawnRandom()
         self.DisplayObject.x = display.contentWidth / 2 + math.random(150, 280);
         self.DisplayObject.Type = "squirrel";
     elseif num == 5 then
-      self.DisplayObject = display.newImage(NPC.sheetNpc1, 1, display.contentWidth / 2 + math.random(-200, 200), -380)
+      self.DisplayObject = display.newImage(NPC.sheetNpc1, 1, display.contentWidth / 2 + math.random(-200, 200), math.random( -400 , - 350))
       self.SpeedX = 0;
       self.DisplayObject.Type = "human";
     elseif num == 6 then
-      self.DisplayObject = display.newImage(NPC.sheetNpc2, 1, display.contentWidth / 2 + math.random(-200, 200), -380)
+      self.DisplayObject = display.newImage(NPC.sheetNpc2, 1, display.contentWidth / 2 + math.random(-200, 200), math.random( -400 , - 350))
       self.SpeedX = 0;
       self.DisplayObject.Type = "human";
     elseif num == 7 then
-      self.DisplayObject = display.newImage(SQUIRREL.sheet, 1, display.contentWidth / 2 + math.random(-200, 200), -380)
+      self.DisplayObject = display.newImage(SQUIRREL.sheet, 1, display.contentWidth / 2 + math.random(-200, 200), math.random( -400 , - 350))
       self.SpeedX = 0;
       self.DisplayObject.Type = "squirrel";
     end
     if num < 5 then
-      self.DisplayObject.y = - 350;
+      self.DisplayObject.y = 0 - math.random (-300, 300);
       self.DisplayObject:play()
     end
 
