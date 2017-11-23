@@ -313,6 +313,7 @@ function Game:createDest(sceneGroup)
         function()
             -- generate random number of npc's
 <<<<<<< HEAD
+<<<<<<< HEAD
                 local d = Destructible:new()
                 d:SpawnRandom()
                 print (d.DisplayObject.Type .. " is created");
@@ -320,10 +321,15 @@ function Game:createDest(sceneGroup)
                 -- error on here... not sure why it is not adding to the group.
                 table.insert(dests, d)
 =======
+=======
+>>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
             local d = Destructible:new()
             d:SpawnRandom(math.random(-100, 100), -math.random(200, 300))
             sceneGroup:insert(d.DisplayObject)
             table.insert(dests, d)
+<<<<<<< HEAD
+>>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
+=======
 >>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
         end,
         -1
@@ -378,6 +384,11 @@ function Game:start(sceneGroup)
     self:createDest(sceneGroup)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    -- add enemies death special function
+    Runtime:addEventListener("onRemove", onRemove)
+>>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
 =======
     -- add enemies death special function
     Runtime:addEventListener("onRemove", onRemove)
@@ -403,8 +414,14 @@ function Game:stop()
     -- remove custom player stat changed event
     Runtime:removeEventListener("onPlayerStatChanged", onPlayerStatChanged)
 <<<<<<< HEAD
+<<<<<<< HEAD
     local options = { effect = "fade", time = 500 }
     composer.gotoScene( 'ending_scenece', options );
+=======
+
+    -- remove enemies death special function
+    Runtime:removeEventListener("onRemove", onRemove)
+>>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
 =======
 
     -- remove enemies death special function
