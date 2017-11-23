@@ -90,16 +90,38 @@ end
 
 -- this function will start the enemy car moving.
 function EnemyVehicle:Start()
-    transition.to(self, {time = 10000, Speed = self.TopSpeed, transition = easing.outBreak})
+    transition.to(self, {time = 5000, Speed = self.TopSpeed, transition = easing.outBreak})
+    local num = 0;
 
-    -- Calculate the difference of speed
     self.moveTimer =
         timer.performWithDelay(
         1 / 60 * 1000,
         function()
+			if (self.DisplayObject == nil) then
+				return;
+			end
+            num = num + 1;
+
+            -- Handle relative movements based on velocity offsets
             dv = self.Player.Speed - self.Speed
             dt = (1000 / 60)
+
             self:Move(0, dv, dt)
+
+            -- Handle catchup mechanic
+            catchUp = 1;
+            if (self.Player.Speed - self.Speed > catchUp and self.Player.Speed > 0) then
+                transition.to(self, {time = 1500, Speed = self.TopSpeed});
+            end
+
+            -- Handle Moving towards the Player position
+            if (num % 120 == 0) then
+                if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
+                    self:Turn("left");
+                else
+                    self:Turn("right");
+                end
+            end
         end,
         -1
     )
