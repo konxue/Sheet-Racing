@@ -3,7 +3,7 @@ local Car = require("vehicle.car")
 local Explosion = require("effects.explosion")
 local soundTable = require("sounds.soundTable")
 
-EnemyVehicle = Vehicle:new({HP = 50, TopSpeed = 95, Value = 5, Enemies = {}})
+EnemyVehicle = Vehicle:new({HP = 30, TopSpeed = 95, Value = 5, Enemies = {}})
 EnemyVehicle.Type = "EnemyVehicle"
 
 -- Initializes a new EnemyVehicle object.
