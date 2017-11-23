@@ -62,6 +62,14 @@ function onPlayerStatChanged(event)
     pStatText.text = string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score)
 end
 
+-- This custom event will remove a dead enemy from the table.
+function onRemove(event)
+    if event.target ~= nil then
+        event.target = nil
+        print("removed enemy")
+    end
+end
+
 -- This function will start all enemies moving relative to the player
 function startEnemies()
     for i, v in ipairs(enemies) do
@@ -274,6 +282,9 @@ function Game:createEnemies(sceneGroup)
 
         -- add enemy to the table
         table.insert(enemies, e)
+
+        -- pass enemies table
+        e.Enemies = enemies
     end
 end
 
@@ -299,10 +310,10 @@ function Game:createDest(sceneGroup)
         math.random(2000, 6000),
         function()
             -- generate random number of npc's
-                local d = Destructible:new()
-                d:SpawnRandom(math.random(-100,100), -math.random(200, 300))
-                sceneGroup:insert(d.DisplayObject)
-                table.insert(dests, d)
+            local d = Destructible:new()
+            d:SpawnRandom(math.random(-100, 100), -math.random(200, 300))
+            sceneGroup:insert(d.DisplayObject)
+            table.insert(dests, d)
         end,
         -1
     )
@@ -354,6 +365,9 @@ function Game:start(sceneGroup)
 
     -- start creating destructibles
     self:createDest(sceneGroup)
+
+    -- add enemies death special function
+    Runtime:addEventListener("onRemove", onRemove)
 end
 
 -- This function will stop the game
@@ -374,6 +388,9 @@ function Game:stop()
 
     -- remove custom player stat changed event
     Runtime:removeEventListener("onPlayerStatChanged", onPlayerStatChanged)
+
+    -- remove enemies death special function
+    Runtime:removeEventListener("onRemove", onRemove)
 end
 
 return Game

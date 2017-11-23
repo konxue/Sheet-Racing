@@ -3,7 +3,7 @@ local Car = require("vehicle.car")
 local Explosion = require("effects.explosion")
 local soundTable = require("sounds.soundTable")
 
-EnemyVehicle = Vehicle:new({HP = 10, TopSpeed = 99, Value = 5})
+EnemyVehicle = Vehicle:new({HP = 10, TopSpeed = 99, Value = 5, Enemies = {}})
 EnemyVehicle.Type = "EnemyVehicle"
 
 -- Initializes a new EnemyVehicle object.
@@ -29,6 +29,7 @@ function onDeath(event)
             event.target.DisplayObject = nil
             explode:removeSelf()
             explode = nil
+            Runtime:dispatchEvent({name = "onRemove", target = event.target})
         end
     )
 end
