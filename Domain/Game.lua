@@ -4,7 +4,6 @@ local Destructible = require("Domain.destructible")
 local Widget = require("widget")
 local Game = {}
 local p
-local d
 local deltatime = 0
 local runtime = 0
 local speedInc = 5
@@ -310,14 +309,13 @@ end
 function Game:createDest(sceneGroup)
     destTimerRef =
         timer.performWithDelay(
-        math.random(1000, 5000),
+        1000,
         function()
             -- generate random number of npc's
-                d = Destructible:new()
+                local d = Destructible:new()
                 d:SpawnRandom()
-                --print (d.DisplayObject.Type .. " is created");
+                print (d.DisplayObject.Type .. " is created in game");
                 sceneGroup:insert(d.DisplayObject)
-                -- error on here... not sure why it is not adding to the group.
                 table.insert(dests, d)
         end,
         -1

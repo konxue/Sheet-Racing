@@ -68,14 +68,16 @@ local function onCollision(event)
 
         -- we hit human
         elseif that.Type == "PlayerVehicle" and this.DisplayObject.Type == "human" then
+          this.HP = this.HP - 1;
           that.Score = that.Score + this.Value -- increase players score
         end
 
-        -- enemy hits squirrel
+        -- enemy hits destructible
         if that.Type == "EnemyVehicle" then
             this.HP = this.HP - 1;
         end
 
+        -- when destructible is dying
         if this.HP <= 0 then
           transition.cancel(this.DisplayObject);
           this.DisplayObject:dispatchEvent({name = "onDestruct", target = this});
@@ -105,6 +107,7 @@ function Destructible:Move()
         transition.cancel(self.DisplayObject)
         self.DisplayObject:removeEventListener("collision", onCollision)
         self.DisplayObject:removeEventListener("onDestruct", onDestruct);
+
         display.remove(self.DisplayObject)
         self.DisplayObject = nil
         return
@@ -126,58 +129,61 @@ end
 -- Spawns the destructibles to the given x and y coordinates.
 -- Also adds the physics to the object
 function Destructible:SpawnRandom()
-    local num = 4--math.random(0, 7);
+    local num = math.random(0, 7);
     if num < 4 then
         if num == 0 then
             self.DisplayObject = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
             self.DisplayObject:setSequence("npc1_walk_left")
             self.DisplayObject.direction = "left"
-            self.DisplayObject.x = display.contentWidth + math.random(-100, 100);
+            self.DisplayObject.x = display.contentWidth / 2 + math.random(150, 280);
             self.DisplayObject.Type = "human";
         elseif num == 1 then
             self.DisplayObject = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
             self.DisplayObject:setSequence("npc1_walk_right")
             self.DisplayObject.direction = "right"
-            self.DisplayObject.x = 0  + math.random(-100, 100);
+            self.DisplayObject.x = 0;
             self.DisplayObject.Type = "human";
         elseif num == 2 then
             self.DisplayObject = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
             self.DisplayObject:setSequence("npc2_walk_left")
             self.DisplayObject.direction = "left"
-            self.DisplayObject.x = display.contentWidth + math.random(-100, 100);
+            self.DisplayObject.x = display.contentWidth / 2 + math.random(150, 280);
             self.DisplayObject.Type = "human";
         elseif num == 3 then
             self.DisplayObject = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
             self.DisplayObject:setSequence("npc2_walk_right")
             self.DisplayObject.direction = "right"
-            self.DisplayObject.x = 0 + math.random(-100, 100);
+            self.DisplayObject.x = 0;
             self.DisplayObject.Type = "human";
         end
     elseif num == 4 then
         self.DisplayObject = display.newSprite(SQUIRREL.sheet, SQUIRREL.sequenceData)
         self.DisplayObject:setSequence("squirrel")
         self.DisplayObject.direction = "left"
-        self.DisplayObject.x = display.contentWidth  + math.random(-100, 100);
+        self.DisplayObject.x = display.contentWidth / 2 + math.random(150, 280);
         self.DisplayObject.Type = "squirrel";
     elseif num == 5 then
-      self.DisplayObject = display.newImage(NPC.sheetNpc1, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.DisplayObject = display.newImage(NPC.sheetNpc1, 1, display.contentWidth / 2 + math.random(-200, 200), -380)
       self.SpeedX = 0;
       self.DisplayObject.Type = "human";
     elseif num == 6 then
-      self.DisplayObject = display.newImage(NPC.sheetNpc2, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.DisplayObject = display.newImage(NPC.sheetNpc2, 1, display.contentWidth / 2 + math.random(-200, 200), -380)
       self.SpeedX = 0;
       self.DisplayObject.Type = "human";
     elseif num == 7 then
-      self.DisplayObject = display.newImage(SQUIRREL.sheet, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.DisplayObject = display.newImage(SQUIRREL.sheet, 1, display.contentWidth / 2 + math.random(-200, 200), -380)
       self.SpeedX = 0;
       self.DisplayObject.Type = "squirrel";
     end
-      self.DisplayObject.y = - 380;
     if num < 5 then
+      self.DisplayObject.y = - 350;
       self.DisplayObject:play()
     end
+
     -- passing data from object1 to DisplayObject
-    --self.DisplayObject.Type = object1.Type; -- sending
+    --self.DisplayObject = object1;
+    --self.DisplayObject.Type = object1.Type; -- sending ty
+
     self.DisplayObject.pp = self; -- Parent Object
     physics.addBody(self.DisplayObject, {isSensor = true})
     self.DisplayObject:addEventListener("collision", onCollision)
