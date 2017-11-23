@@ -8,10 +8,11 @@ local deltatime = 0
 local runtime = 0
 local speedInc = 5
 local pStatText
-local statFormat = "AR: %d | HP: %d | SP: %d | SC: %d"
+local statFormat = "AR: %d | HP: %d | SP: %d | SC: %d | E: %d"
 local enemies = {}
 local dests = {}
 local enemyCount = 4
+local curEnemyCount = 4
 local startPos = {
     {x = 140, y = 462}, -- 1 postion
     {x = 140, y = 113}, -- 2 postion
@@ -59,7 +60,16 @@ Runtime:addEventListener("enterFrame", getDeltaTime)
 
 -- This custom event will change the player stats text.
 function onPlayerStatChanged(event)
-    pStatText.text = string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score)
+    pStatText.text = string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score, curEnemyCount)
+end
+
+-- This custom event will remove a dead enemy from the table.
+function onRemove(event)
+    if event.target ~= nil then
+        event.target = nil
+        curEnemyCount = curEnemyCount - 1
+        print("removed enemy")
+    end
 end
 
 -- This function will start all enemies moving relative to the player
@@ -234,7 +244,7 @@ function Game:createHud(sceneGroup)
     -- player stats
     pStatText =
         display.newEmbossedText(
-        string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score),
+        string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score, curEnemyCount),
         display.contentCenterX,
         -342,
         native.systemFont,
@@ -274,6 +284,9 @@ function Game:createEnemies(sceneGroup)
 
         -- add enemy to the table
         table.insert(enemies, e)
+
+        -- pass enemies table
+        e.Enemies = enemies
     end
 end
 
@@ -296,13 +309,22 @@ end
 function Game:createDest(sceneGroup)
     destTimerRef =
         timer.performWithDelay(
-        math.random(2000, 6000),
+        math.random(1000, 5000),
         function()
             -- generate random number of npc's
+<<<<<<< HEAD
                 local d = Destructible:new()
-                d:SpawnRandom(math.random(-100,100), -math.random(200, 300))
+                d:SpawnRandom()
+                print (d.DisplayObject.Type .. " is created");
                 sceneGroup:insert(d.DisplayObject)
+                -- error on here... not sure why it is not adding to the group.
                 table.insert(dests, d)
+=======
+            local d = Destructible:new()
+            d:SpawnRandom(math.random(-100, 100), -math.random(200, 300))
+            sceneGroup:insert(d.DisplayObject)
+            table.insert(dests, d)
+>>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
         end,
         -1
     )
@@ -354,6 +376,12 @@ function Game:start(sceneGroup)
 
     -- start creating destructibles
     self:createDest(sceneGroup)
+
+<<<<<<< HEAD
+=======
+    -- add enemies death special function
+    Runtime:addEventListener("onRemove", onRemove)
+>>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
 end
 
 -- This function will stop the game
@@ -374,6 +402,14 @@ function Game:stop()
 
     -- remove custom player stat changed event
     Runtime:removeEventListener("onPlayerStatChanged", onPlayerStatChanged)
+<<<<<<< HEAD
+    local options = { effect = "fade", time = 500 }
+    composer.gotoScene( 'ending_scenece', options );
+=======
+
+    -- remove enemies death special function
+    Runtime:removeEventListener("onRemove", onRemove)
+>>>>>>> 7cdfcc8e7c34ed574e91d98bd9a76d30f447bf51
 end
 
 return Game

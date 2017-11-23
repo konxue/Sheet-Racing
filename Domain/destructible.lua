@@ -6,11 +6,14 @@ local Destructible = {
     Name = "",
     Value = 1,
     Armor = 0,
-    DisplayObject = {},
+    DisplayObject = {
+        Type = ""
+      },
+
     HP = 1,
-    Type = "Destructible",
     SpeedX = 10,
-    SpeedY = 0
+    SpeedY = 0,
+    Type = "Destructible"
 }
 
 function Destructible:new(obj)
@@ -22,44 +25,65 @@ end
 
 -- Event handler for when the vehicle dies
 function onDestruct(event)
-    timer.performWithDelay( 500, function()
+    if (event.target.DisplayObject.Type == "human") then
       audio.play(soundTable["hurt"]);
-    end);
-    local blood = display.newSprite(Blood["sheet"], Blood["sequenceData"])
-    blood:setSequence("blood")
-    blood.x = event.target.DisplayObject.x
-    blood.y = event.target.DisplayObject.y
-    display.remove(event.target.DisplayObject)
-    event.target.DisplayObject = nil
-    blood:play()
-    timer.performWithDelay(
-        200,
-        function()
-            blood:removeSelf()
-            blood = nil
-        end,
-        1
-    )
+      local blood = display.newSprite(Blood["sheet"], Blood["sequenceData"])
+      blood:setSequence("blood")
+      blood.x = event.target.DisplayObject.x
+      blood.y = event.target.DisplayObject.y
+      display.remove(event.target.DisplayObject)
+      event.target.DisplayObject = nil
+      blood:play()
+      timer.performWithDelay(
+          200,
+          function()
+              blood:removeSelf()
+              blood = nil
+          end,
+          1
+      )
+    elseif (event.target.DisplayObject.Type == "squirrel") then
+      audio.play(soundTable["hp"]);
+      local HPpowerup = display.newImage("effects/hp.png", event.target.DisplayObject.x, event.target.DisplayObject.y);
+      display.remove(event.target.DisplayObject);
+      event.target.DisplayObject = nil;
+      timer.performWithDelay(
+          200,
+          function()
+              HPpowerup:removeSelf()
+              HPpowerup = nil
+          end)
+    end
 end
+
 
 -- Private function that handles collision events for destructibles.
 local function onCollision(event)
     local this = event.target.pp
     local that = event.other.pp
+    --print (this.DisplayObject.Type .. " got hit by ".. that.Type);
     if (event.phase == "began") then
-        if (that.Type == "PlayerVehicle") then
-            this.HP = this.HP - 1 -- reduce destructible health
+        -- we hit squirrel
+        if that.Type == "PlayerVehicle" and this.DisplayObject.Type == "squirrel" then
+            this.HP = this.HP - 1; -- reduce destructible health
+            that.HP = that.HP + 6 -- increase our health when hit squirrel as the powerup~
             that.Score = that.Score + this.Value -- increase players score
-        end
-        if (that.Type == "EnemyVehicle") then
-            this.HP = this.HP - 1
+
+        -- we hit human
+        elseif that.Type == "PlayerVehicle" and this.DisplayObject.Type == "human" then
+          that.Score = that.Score + this.Value -- increase players score
         end
 
-        if (this.HP <= 0) then
-            transition.cancel(this.DisplayObject)
-            this.DisplayObject:dispatchEvent({name = "onDestruct", target = this})
+        -- enemy hits squirrel
+        if that.Type == "EnemyVehicle" then
+            this.HP = this.HP - 1;
         end
-    end
+
+        if this.HP <= 0 then
+          transition.cancel(this.DisplayObject);
+          this.DisplayObject:dispatchEvent({name = "onDestruct", target = this});
+        end
+      end
 end
 
 -- This function will move the destructible.
@@ -83,7 +107,7 @@ function Destructible:Move()
     if x < 0 or x > display.contentWidth then
         transition.cancel(self.DisplayObject)
         self.DisplayObject:removeEventListener("collision", onCollision)
-        self.DisplayObject:removeEventListener("onDestruct", onDestruct)
+        self.DisplayObject:removeEventListener("onDestruct", onDestruct);
         display.remove(self.DisplayObject)
         self.DisplayObject = nil
         return
@@ -104,57 +128,63 @@ end
 
 -- Spawns the destructibles to the given x and y coordinates.
 -- Also adds the physics to the object
-function Destructible:SpawnRandom(x, y)
-    local num = math.random(0, 7);
-    local object1;
+function Destructible:SpawnRandom()
+    local num = 1 --math.random(0, 7);
     if num < 4 then
         if num == 0 then
-            object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
-            object1:setSequence("npc1_walk_left")
-            object1.direction = "left"
-            object1.x = display.contentWidth
+            self.DisplayObject = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
+            self.DisplayObject:setSequence("npc1_walk_left")
+            self.DisplayObject.direction = "left"
+            self.DisplayObject.x = display.contentWidth + math.random(-100, 100);
+            self.DisplayObject.Type = "human";
         elseif num == 1 then
-            object1 = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
-            object1:setSequence("npc1_walk_right")
-            object1.direction = "right"
-            object1.x = 0
+            self.DisplayObject = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
+            self.DisplayObject:setSequence("npc1_walk_right")
+            self.DisplayObject.direction = "right"
+            self.DisplayObject.x = 0  + math.random(-100, 100);
+            self.DisplayObject.Type = "human";
         elseif num == 2 then
-            object1 = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
-            object1:setSequence("npc2_walk_left")
-            object1.direction = "left"
-            object1.x = display.contentWidth
+            self.DisplayObject = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
+            self.DisplayObject:setSequence("npc2_walk_left")
+            self.DisplayObject.direction = "left"
+            self.DisplayObject.x = display.contentWidth + math.random(-100, 100);
+            self.DisplayObject.Type = "human";
         elseif num == 3 then
-            object1 = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
-            object1:setSequence("npc2_walk_right")
-            object1.direction = "right"
-            object1.x = 0
+            self.DisplayObject = display.newSprite(NPC.sheetNpc2, NPC.sequenceData)
+            self.DisplayObject:setSequence("npc2_walk_right")
+            self.DisplayObject.direction = "right"
+            self.DisplayObject.x = 0 + math.random(-100, 100);
+            self.DisplayObject.Type = "human";
         end
     elseif num == 4 then
-        object1 = display.newSprite(SQUIRREL.sheet, SQUIRREL.sequenceData)
-        object1:setSequence("squirrel")
-        object1.direction = "left"
-        object1.x = display.contentWidth
+        self.DisplayObject = display.newSprite(SQUIRREL.sheet, SQUIRREL.sequenceData)
+        self.DisplayObject:setSequence("squirrel")
+        self.DisplayObject.direction = "left"
+        self.DisplayObject.x = display.contentWidth  + math.random(-100, 100);
+        self.DisplayObject.Type = "squirrel";
     elseif num == 5 then
-      object1 = display.newImage(NPC.sheetNpc1, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.DisplayObject = display.newImage(NPC.sheetNpc1, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
       self.SpeedX = 0;
+      self.DisplayObject.Type = "human";
     elseif num == 6 then
-      object1 = display.newImage(NPC.sheetNpc2, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.DisplayObject = display.newImage(NPC.sheetNpc2, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
       self.SpeedX = 0;
+      self.DisplayObject.Type = "human";
     elseif num == 7 then
-      object1 = display.newImage(SQUIRREL.sheet, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
+      self.DisplayObject = display.newImage(SQUIRREL.sheet, 1, display.contentWidth / 2 + math.random(-100, 100), -380)
       self.SpeedX = 0;
+      self.DisplayObject.Type = "squirrel";
     end
 
     if num < 5 then
-      object1:play()
-      object1.y = y
+      self.DisplayObject:play()
     end
-
-    self.DisplayObject = object1
-    self.DisplayObject.pp = self -- Parent Object
+    -- passing data from self.DisplayObject to DisplayObject
+    --self.DisplayObject.Type = self.DisplayObject.Type; -- sending
+    self.DisplayObject.pp = self; -- Parent Object
     physics.addBody(self.DisplayObject, {isSensor = true})
     self.DisplayObject:addEventListener("collision", onCollision)
-    self.DisplayObject:addEventListener("onDestruct", onDestruct)
+    self.DisplayObject:addEventListener("onDestruct", onDestruct);
     self.DisplayObject:toBack()
     self:Move()
 end
