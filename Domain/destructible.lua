@@ -6,10 +6,7 @@ local Destructible = {
     Name = "",
     Value = 1,
     Armor = 0,
-    DisplayObject = {
-        Type = ""
-      },
-
+    DisplayObject = {},
     HP = 1,
     SpeedX = 10,
     SpeedY = 0,
@@ -129,7 +126,7 @@ end
 -- Spawns the destructibles to the given x and y coordinates.
 -- Also adds the physics to the object
 function Destructible:SpawnRandom()
-    local num = 1 --math.random(0, 7);
+    local num = 4--math.random(0, 7);
     if num < 4 then
         if num == 0 then
             self.DisplayObject = display.newSprite(NPC.sheetNpc1, NPC.sequenceData)
@@ -175,12 +172,12 @@ function Destructible:SpawnRandom()
       self.SpeedX = 0;
       self.DisplayObject.Type = "squirrel";
     end
-
+      self.DisplayObject.y = - 380;
     if num < 5 then
       self.DisplayObject:play()
     end
-    -- passing data from self.DisplayObject to DisplayObject
-    --self.DisplayObject.Type = self.DisplayObject.Type; -- sending
+    -- passing data from object1 to DisplayObject
+    --self.DisplayObject.Type = object1.Type; -- sending
     self.DisplayObject.pp = self; -- Parent Object
     physics.addBody(self.DisplayObject, {isSensor = true})
     self.DisplayObject:addEventListener("collision", onCollision)
