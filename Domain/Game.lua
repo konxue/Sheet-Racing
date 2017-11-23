@@ -8,10 +8,11 @@ local deltatime = 0
 local runtime = 0
 local speedInc = 5
 local pStatText
-local statFormat = "AR: %d | HP: %d | SP: %d | SC: %d"
+local statFormat = "AR: %d | HP: %d | SP: %d | SC: %d | E: %d"
 local enemies = {}
 local dests = {}
 local enemyCount = 4
+local curEnemyCount = 4
 local startPos = {
     {x = 140, y = 462}, -- 1 postion
     {x = 140, y = 113}, -- 2 postion
@@ -59,13 +60,14 @@ Runtime:addEventListener("enterFrame", getDeltaTime)
 
 -- This custom event will change the player stats text.
 function onPlayerStatChanged(event)
-    pStatText.text = string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score)
+    pStatText.text = string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score, curEnemyCount)
 end
 
 -- This custom event will remove a dead enemy from the table.
 function onRemove(event)
     if event.target ~= nil then
         event.target = nil
+        curEnemyCount = curEnemyCount - 1
         print("removed enemy")
     end
 end
@@ -242,7 +244,7 @@ function Game:createHud(sceneGroup)
     -- player stats
     pStatText =
         display.newEmbossedText(
-        string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score),
+        string.format(statFormat, p.Armor, p.HP, p.Speed, p.Score, curEnemyCount),
         display.contentCenterX,
         -342,
         native.systemFont,
