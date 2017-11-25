@@ -13,7 +13,7 @@ PlayerVehicle.Score = 0
 PlayerVehicle.Type = "PlayerVehicle"
 
 -- Event handler for when the vehicle dies
-function onDeath(event)
+function onPlayerDeath(event)
     local explode = display.newSprite(Explosion["sheet"], Explosion["sequenceData"])
     explode:setSequence("explosion")
     explode.x = event.target.DisplayObject.x
@@ -65,7 +65,7 @@ local function onCollision(event)
         end
 
         if (this.HP <= 0) then
-            Runtime:dispatchEvent({name = "onDeath", target = this})
+            Runtime:dispatchEvent({name = "onPlayerDeath", target = this})
         end
     end
 end
@@ -85,7 +85,7 @@ function PlayerVehicle:Spawn(x, y)
     self.DisplayObject.pp = self -- Parent Object
     physics.addBody(self.DisplayObject, "kinematic", {density = 1, friction = 0.1, bounce = 0.2})
     self.DisplayObject:addEventListener("collision", onCollision)
-    Runtime:addEventListener("onDeath", onDeath)
+    Runtime:addEventListener("onPlayerDeath", onPlayerDeath)
 end
 
 return PlayerVehicle

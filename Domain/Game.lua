@@ -65,6 +65,9 @@ end
 
 -- This custom event will remove a dead enemy from the table.
 function onRemove(event)
+    if curEnemyCount == 0 then
+        return
+    end
     if event.target ~= nil then
         event.target = nil
         curEnemyCount = curEnemyCount - 1
