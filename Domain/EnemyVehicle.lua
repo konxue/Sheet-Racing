@@ -3,7 +3,7 @@ local Car = require("vehicle.car")
 local Explosion = require("effects.explosion")
 local soundTable = require("sounds.soundTable")
 
-EnemyVehicle = Vehicle:new({HP = 10, TopSpeed = 95, Value = 5, Enemies = {}})
+EnemyVehicle = Vehicle:new({HP = 30, TopSpeed = 95, Value = 5, Enemies = {}})
 EnemyVehicle.Type = "EnemyVehicle"
 
 -- Initializes a new EnemyVehicle object.
@@ -80,7 +80,7 @@ end
 -- Spawns the vehicle to the given x and y coordinates.
 -- Also adds the physics to the object
 function EnemyVehicle:SpawnRandom(x, y)
-    result = math.random(1, 6)
+    result = math.random(2, 7)
     self.DisplayObject = display.newImage(Car.sheet, result, x, y)
     self.DisplayObject.pp = self -- Parent Object
     physics.addBody(self.DisplayObject, {density = 1, friction = 0.1, bounce = 0.2})
