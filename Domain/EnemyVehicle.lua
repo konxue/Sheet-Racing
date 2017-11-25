@@ -46,6 +46,11 @@ local function onCollision(event)
     local this = event.target.pp
     local that = event.other.pp
     if (event.phase == "began") then
+
+        if this.HP <= 0 then
+            return
+        end
+        
         if (that.Type == "PlayerVehicle") then
             if (math.random(100) > this.Armor) then -- enemy take damage
                 this.HP = this.HP - (1 * this.DmgRatio)
