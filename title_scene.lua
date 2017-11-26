@@ -16,8 +16,8 @@ local btnSettings -- The settings button
 -- Handles when the settings button is pressed
 -- goes to the options scene
 function onSettingsPress( event )
-  local options = { effect = "fromRight", time = 500 }
-  -- composer.gotoScene( 'gameplay_scene.lua', options )
+  local options = { effect = "fromRight", time = 500, params = {StartingHP = 100, StartingArmor = 50, Score = 0} }
+  composer.gotoScene( 'unlockables_scene', options )
 end
 
 -- Handles when the start button is pressed
@@ -44,7 +44,7 @@ function scene:create( event )
 
     -- options for the start button widget
     local startOptions = {
-      x = display.contentWidth / 2 - 170, -- just left of middle of screen
+      x = display.contentWidth / 2, -- just left of middle of screen
       y = display.contentCenterY + 350, -- just below center of screen
       label = "Start", -- start is the text
       labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
@@ -55,9 +55,9 @@ function scene:create( event )
 
     -- options for the setting button widget
     local settingsOptions = {
-      x = display.contentWidth / 2 + 150, -- right right of center
-      y = display.contentCenterY + 350, -- just below center
-      label = "Settings", -- settings is the text
+      x = display.contentWidth / 2, -- right right of center
+      y = display.contentCenterY + 410, -- just below center
+      label = "Unlockables", -- settings is the text
       labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
       fontSize = 60,
       textOnly = true,
