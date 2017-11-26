@@ -82,7 +82,7 @@ local function onCollision(event)
             this.HP = this.HP - 1;  -- reduce destructible health
             if that.Armor <= 95 then --  only when armor is lesser than or equal to 95
             that.Armor = that.Armor + 5; -- increase our armor when hit shield as the powerup~
-            else that.Armor > 95 then
+            elseif that.Armor > 95 then
             that.Armor = 100; -- max cap for armor is 100
             end
             that.Score = that.Score + this.Value  -- increase players score

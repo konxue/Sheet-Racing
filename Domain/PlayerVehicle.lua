@@ -8,7 +8,7 @@ local Physics = require("physics")
 local Car = require("vehicle.car")
 local soundTable = require("sounds.soundTable")
 
-PlayerVehicle = Vehicle:new({PlayerDmg = 5, Armor = 100})
+PlayerVehicle = Vehicle:new({PlayerDmg = 10, Armor = 100})
 PlayerVehicle.Score = 0
 PlayerVehicle.Type = "PlayerVehicle"
 
@@ -48,8 +48,10 @@ local function onCollision(event)
                 this.HP = this.HP - this.PlayerDmg
             end
         else -- Armor saved you! You only lose armor, no HP
-            if this.Armor > 1 then
-                this.Armor = this.Armor - 1
+            if this.Armor > 5 then
+                this.Armor = this.Armor - 5
+            elseif this.Armor <= 5 then
+                this.Armor = 0;
             end
         end
 
