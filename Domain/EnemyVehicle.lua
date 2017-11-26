@@ -3,7 +3,7 @@ local Car = require("vehicle.car")
 local Explosion = require("effects.explosion")
 local soundTable = require("sounds.soundTable")
 
-EnemyVehicle = Vehicle:new({HP = 30, TopSpeed = 95, Value = 5, Enemies = {}})
+EnemyVehicle = Vehicle:new({HP = 30, TopSpeed = 95, Value = 50, Enemies = {}})
 EnemyVehicle.Type = "EnemyVehicle"
 
 -- Initializes a new EnemyVehicle object.
@@ -95,7 +95,7 @@ end
 
 -- this function will start the enemy car moving.
 function EnemyVehicle:Start()
-    transition.to(self, {time = 5000, Speed = self.TopSpeed, transition = easing.outBreak})
+    transition.to(self, {time = 10000, Speed = self.TopSpeed, transition = easing.outCubic})
     local num = 0;
 
     self.moveTimer =
