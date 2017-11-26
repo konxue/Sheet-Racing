@@ -95,14 +95,14 @@ end
 
 -- this function will start the enemy car moving.
 function EnemyVehicle:Start()
-    transition.to(self, {time = 10000, Speed = self.TopSpeed, transition = easing.outCubic})
+    transition.to(self, {time = 7000, Speed = self.TopSpeed})
     local num = 0;
 
     self.moveTimer =
         timer.performWithDelay(
         1 / 60 * 1000,
         function()
-			if (self.DisplayObject == nil) then
+			if (self.DisplayObject == nil or self.Player.DisplayObject == nil) then
 				return;
 			end
             num = num + 1;
