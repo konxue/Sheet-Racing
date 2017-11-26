@@ -21,6 +21,10 @@ local startPos = {
 }
 local destTimerRef
 
+-- start and setup physics
+physics:start()
+physics.setGravity(0, 0) -- no gravity
+
 -- Initializes a new instance of the Game class.
 function Game:new(obj)
     local t = obj or {}
