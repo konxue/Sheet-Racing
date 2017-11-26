@@ -94,7 +94,7 @@ end
 
 -- this function will start the enemy car moving.
 function EnemyVehicle:Start()
-    transition.to(self, {time = 7000, Speed = self.TopSpeed})
+    transition.to(self, {time = 7000, Speed = self.TopSpeed, transition = easing.inBack})
     local num = 0
 
     self.moveTimer =
