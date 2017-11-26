@@ -19,6 +19,11 @@ end
 
 -- Turn the vehicle based on the direction and speed of the car.
 function Vehicle:Turn(direction)
+
+    if self.DisplayObject == nil then
+        return
+    end
+
     if direction == "left" then
         self.DisplayObject:rotate(-1 * self.RRatio * self.Speed);
         self:Move(-1 * self.TurnRatio * self.Speed, 0, self.MoveTime);
@@ -31,6 +36,11 @@ function Vehicle:Turn(direction)
     timer.performWithDelay(
         self.MoveTime,
         function()
+    
+            if self.DisplayObject == nil then
+                return
+            end
+            
             self.DisplayObject:rotate(self.DisplayObject.rotation * -1)
         end,
         1

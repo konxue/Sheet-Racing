@@ -8,7 +8,7 @@ local Physics = require("physics")
 local Car = require("vehicle.car")
 local soundTable = require("sounds.soundTable")
 
-PlayerVehicle = Vehicle:new()
+PlayerVehicle = Vehicle:new({PlayerDmg = 5, Armor = 100})
 PlayerVehicle.Score = 0
 PlayerVehicle.Type = "PlayerVehicle"
 
@@ -36,16 +36,26 @@ local function onCollision(event)
     local this = event.target.pp
     local that = event.other.pp
     if (event.phase == "began") then
+        if this.HP <= 0 then
+            return
+        end
+
         audio.play(soundTable["whack"])
         if (math.random(100) > this.Armor) then -- You take damage
-            this.HP = this.HP - 1
+            if this.HP < this.PlayerDmg then
+                this.HP = 0
+            else
+                this.HP = this.HP - this.PlayerDmg
+            end
         else -- Armor saved you! You only lose armor, no HP
-            this.Armor = this.Armor - 1
+            if this.Armor > 1 then
+                this.Armor = this.Armor - 1
+            end
         end
 
         -- slow down vehicle
         if (this.Speed > 0) then
-        this.Speed = this.Speed - this.SpeedInc
+            this.Speed = this.Speed - this.SpeedInc
         end
         -- send player stat change event
         Runtime:dispatchEvent({name = "onPlayerStatChanged"})
