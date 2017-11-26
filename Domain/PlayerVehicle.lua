@@ -8,7 +8,7 @@ local Physics = require("physics")
 local Car = require("vehicle.car")
 local soundTable = require("sounds.soundTable")
 
-PlayerVehicle = Vehicle:new({PlayerDmg = 5, Armor = 100})
+PlayerVehicle = Vehicle:new({PlayerDmg = 5, Armor = 50})
 PlayerVehicle.Score = 0
 PlayerVehicle.Type = "PlayerVehicle"
 

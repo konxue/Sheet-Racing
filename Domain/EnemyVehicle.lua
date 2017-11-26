@@ -46,11 +46,10 @@ local function onCollision(event)
     local this = event.target.pp
     local that = event.other.pp
     if (event.phase == "began") then
-
         if this.HP <= 0 then
             return
         end
-        
+
         if (that.Type == "PlayerVehicle") then
             if (math.random(100) > this.Armor) then -- enemy take damage
                 this.HP = this.HP - (1 * this.DmgRatio)
@@ -96,16 +95,16 @@ end
 -- this function will start the enemy car moving.
 function EnemyVehicle:Start()
     transition.to(self, {time = 7000, Speed = self.TopSpeed})
-    local num = 0;
+    local num = 0
 
     self.moveTimer =
         timer.performWithDelay(
         1 / 60 * 1000,
         function()
-			if (self.DisplayObject == nil or self.Player.DisplayObject == nil) then
-				return;
-			end
-            num = num + 1;
+            if (self.DisplayObject == nil or self.Player.DisplayObject == nil) then
+                return
+            end
+            num = num + 1
 
             -- Handle relative movements based on velocity offsets
             dv = self.Player.Speed - self.Speed
@@ -114,17 +113,19 @@ function EnemyVehicle:Start()
             self:Move(0, dv, dt)
 
             -- Handle catchup mechanic
-            catchUp = 1;
+            catchUp = 1
             if (self.Player.Speed - self.Speed > catchUp and self.Player.Speed > 0) then
-                transition.to(self, {time = 1500, Speed = self.TopSpeed});
+                transition.to(self, {time = 1500, Speed = self.TopSpeed})
             end
 
             -- Handle Moving towards the Player position
             if (num % 120 == 0) then
-                if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
-                    self:Turn("left");
-                else
-                    self:Turn("right");
+                if self.Player.DisplayObject == nil then
+                    if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
+                        self:Turn("left")
+                    else
+                        self:Turn("right")
+                    end
                 end
             end
         end,
