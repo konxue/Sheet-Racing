@@ -14,7 +14,9 @@ Vehicle = {
 
 -- Moves the vehicle by the given offset in the given time.
 function Vehicle:Move(deltaX, deltaY, t)
-    transition.to(self.DisplayObject, {x = self.DisplayObject.x + deltaX, y = self.DisplayObject.y + deltaY, time = t})
+    local val = self.DisplayObject.x + deltaX;
+    if val < 0 or val > 600 then return end;
+    transition.to(self.DisplayObject, {x = val, y = self.DisplayObject.y + deltaY, time = t})
 end
 
 -- Turn the vehicle based on the direction and speed of the car.
