@@ -4,7 +4,7 @@ local Physics = require("physics")
 local Car = require("vehicle.car")
 local soundTable = require("sounds.soundTable")
 
-PlayerVehicle = Vehicle:new({PlayerDmg = 5, Armor = 50})
+PlayerVehicle = Vehicle:new({PlayerDmg = 10, Armor = 50})
 PlayerVehicle.Score = 0
 PlayerVehicle.Type = "PlayerVehicle"
 
@@ -36,50 +36,46 @@ local function onCollision(event)
             return
         end
 
-        -- play sound
         audio.play(soundTable["whack"])
+        if (math.random(100) > this.Armor) then -- You take damage
+            if this.HP < this.PlayerDmg then
+                this.HP = 0
+            else
+                this.HP = this.HP - this.PlayerDmg
+            end
+        else -- Armor saved you! You only lose armor, no HP
+            if this.Armor > 5 then
+                this.Armor = this.Armor - 5
+            elseif this.Armor <= 5 then
+                this.Armor = 0;
+            end
+        end
+
+        -- slow down vehicle
+        if (this.Speed > 0) then
+            this.Speed = this.Speed - this.SpeedInc
+        end
+        -- send player stat change event
+        Runtime:dispatchEvent({name = "onPlayerStatChanged"})
+
+        if (that.Type == "Pickup") then
+            -- Handle Pickups
+            print("I ran over a pickup!")
+        end
 
         if (that.Type == "EnemyVehicle") then
-            -- slow down vehicle
-            if (this.Speed > 0) then
-                this.Speed = this.Speed - this.SpeedInc
-            end
-
-            if (math.random(100) > this.Armor) then -- You take damage
-                if this.HP < this.PlayerDmg then
-                    this.HP = 0
-                else
-                    this.HP = this.HP - this.PlayerDmg
-                end
-            else -- Armor saved you! You only lose armor, no HP
-                if this.Armor > 1 then
-                    this.Armor = this.Armor - 1
-                end
-            end
+            -- Handle damage doing to enemy + points
+            print("I hit an enemy vehicle!")
         end
 
         if (that.Type == "Destructible") then
-            -- slow down vehicle
-            if (this.Speed > 0) then
-                this.Speed = this.Speed - this.SpeedInc
-            end
-
-            if (math.random(100) > this.Armor) then -- You take damage
-                this.HP = this.HP - 1
-            else -- Armor saved you! You only lose armor, no HP
-                if this.Armor > 1 then
-                    this.Armor = this.Armor - 1
-                end
-            end
+            -- Handle adding to our score
+            print("I hit a destructible!")
         end
 
-        -- play is dead
         if (this.HP <= 0) then
             Runtime:dispatchEvent({name = "onPlayerDeath", target = this})
         end
-
-        -- send player stat change event
-        Runtime:dispatchEvent({name = "onPlayerStatChanged"})
     end
 end
 
