@@ -1,3 +1,4 @@
+-- option for map
 local optionsMap =
 {
   frames = {

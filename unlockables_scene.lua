@@ -25,18 +25,20 @@ local scoreFormat = "Currency: %d"
 -- Return button
 local returnHome
 ---------------------------------------------------------------------------------
-
+-- the back button options
 local function onBackPressed()
     local options = {effect = "fromRight", time = 400, params = params}
     repo:SetParameters(params);
     composer.gotoScene("title_scene", options)
 end
 
+-- adding armor by pressing + button, cost scores
 local function onAddArmorPressed()
     if params.Score < COST then
         return
     end
     local scor;
+    -- when armor is lesser than 95, and we have money
     if params.StartingArmor <= 95 then
       local armor = params.StartingArmor + 5
       scor = params.Score - COST
@@ -44,6 +46,8 @@ local function onAddArmorPressed()
       params.Score = scor
       startingArmor.text = string.format(startingArmorFormat, armor)
       score.text = string.format(scoreFormat, scor)
+    -- max cap for armor is 100
+    -- when armor is greater than 95, and we have money
     elseif params.StartingArmor > 95 and params.StartingArmor < 100 then
       local armor = 100
       params.StartingArmor = armor
@@ -51,6 +55,8 @@ local function onAddArmorPressed()
       startingArmor.text = string.format(startingArmorFormat, armor)
       score.text = string.format(scoreFormat, scor)
     end
+
+    -- when armor is 100, disable buying option
     if params.StartingArmor == 100 then
       addStartingArmor:setEnabled(false)
       timer.performWithDelay(
@@ -61,7 +67,9 @@ local function onAddArmorPressed()
           1
       )
     end
+    -- when we don't have enough money to purchase
     if scor < COST then
+        --disable buying option
         addStartingArmor:setEnabled(false)
         addStartingHP:setEnabled(false)
         timer.performWithDelay(
@@ -75,18 +83,20 @@ local function onAddArmorPressed()
     end
 end
 
+-- adding health by pressing + button, cost scores
 local function onAddHPPressed()
     if params.Score < COST then
         return
     end
-
+    -- adding health
     local hp = params.StartingHP + 5
+    -- costing money to purchase
     local scor = params.Score - COST
     params.StartingHP = hp
     params.Score = scor
     startingHP.text = string.format(startingHPFormat, hp)
     score.text = string.format(scoreFormat, scor)
-
+    -- when we don't have money
     if scor < COST then
         addStartingArmor:setEnabled(false)
         addStartingHP:setEnabled(false)
@@ -104,7 +114,7 @@ end
 -- "scene:create()"
 function scene:create(event)
     local sceneGroup = self.view
-
+    -- passing the Parameters
     params = event.params
 
     -- Create new buttons and backgrounds
@@ -126,6 +136,7 @@ function scene:create(event)
             onRelease = onAddArmorPressed
         }
     )
+    -- button options
     addStartingHP =
         widget.newButton(
         {
@@ -138,6 +149,7 @@ function scene:create(event)
             onRelease = onAddHPPressed
         }
     )
+    -- button options
     returnHome =
         widget.newButton(
         {
@@ -149,7 +161,7 @@ function scene:create(event)
             onRelease = onBackPressed
         }
     )
-
+    -- adding everything to scene group
     sceneGroup:insert(bg)
     sceneGroup:insert(addStartingArmor)
     sceneGroup:insert(addStartingHP)
@@ -172,24 +184,27 @@ function scene:show(event)
         local startARNum = params.StartingArmor
         local scoreNum = params.Score
 
-        if scoreNum <= COST then
+        -- when we don't have money, disable purchases
+        if scoreNum < COST then
             addStartingArmor:setEnabled(false)
             addStartingHP:setEnabled(false)
 
             addStartingArmor:setFillColor(0, 0, 0)
             addStartingHP:setFillColor(0, 0, 0)
+        -- enable buying
         elseif scoreNum >= 100 and startARNum < 100 then
             addStartingArmor:setEnabled(true)
             addStartingHP:setEnabled(true)
             addStartingArmor:setFillColor(1, 1, 1)
             addStartingHP:setFillColor(1, 1, 1)
-        elseif scoreNum >= 100 and startARNum >= 100 then
-            addStartingHP:setEnabled(false)
-            addStartingArmor:setEnabled(true)
+      -- disable armor purchase, enable health
+      elseif scoreNum >= 100 and startARNum == 100 then
+            addStartingHP:setEnabled(true)
+            addStartingArmor:setEnabled(fasle)
             addStartingArmor:setFillColor(0, 0, 0)
             addStartingHP:setFillColor(1, 1, 1)
         end
-
+        --display text
         startingHP.text = string.format(startingHPFormat, startHPNum)
         startingArmor.text = string.format(startingArmorFormat, startARNum)
         score.text = string.format(scoreFormat, scoreNum)
