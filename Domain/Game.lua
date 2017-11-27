@@ -2,7 +2,7 @@ local Player = require("Domain.PlayerVehicle")
 local Enemy = require("Domain.EnemyVehicle")
 local Destructible = require("Domain.destructible")
 local Widget = require("widget")
-local composer = require( "composer" )
+local composer = require("composer")
 local Game = {}
 local p
 local deltatime = 0
@@ -304,7 +304,7 @@ function Game:createEnemies(sceneGroup)
     -- create random enemy cars
     for i = 1, enemyCount do
         -- create new enemy
-        local e = Enemy:new()
+        local e = Enemy:new({HP = 100})
 
         -- spawn random enemy car
         e:SpawnRandom(startPos[i].x, startPos[i].y)
@@ -325,7 +325,7 @@ end
 
 -- Create gameboard.
 function Game:create(sceneGroup, params)
-    parameters = params;
+    parameters = params
     -- set enemy count
     curEnemyCount = 4
     secondsLeft = 90
@@ -473,12 +473,8 @@ function Game:stop()
     Runtime:removeEventListener("onRemove", onRemove)
 
     -- stop timers
-    if gameTimerRef then
-        timer.cancel(gameTimerRef)
-    end
-    if enemyDeadTimerRef then
-        timer.cancel(enemyDeadTimerRef)
-    end
+    timer.cancel(gameTimerRef)
+    timer.cancel(enemyDeadTimerRef)
 
     -- stop all enemies
     for i, v in ipairs(enemies) do
@@ -488,9 +484,13 @@ function Game:stop()
     end
 
     -- go to end scene
+<<<<<<< HEAD
+    parameters.Score = parameters.Score + p.Score
+=======
     if p.HP > 0 then
         parameters.Score = parameters.Score + p.Score;
     end
+>>>>>>> d9c520d2775cd3c49682e696e31167af2e0a0c5b
     local options = {effect = "fade", time = 500, params = parameters}
     composer.gotoScene("ending_scene", options)
 end
