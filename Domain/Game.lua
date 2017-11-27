@@ -30,7 +30,6 @@ local parameters
 -- start and setup physics
 physics.start()
 physics.setGravity(0, 0) -- no gravity
-physics.setDrawMode("hybrid")
 
 -- Initializes a new instance of the Game class.
 function Game:new(obj)

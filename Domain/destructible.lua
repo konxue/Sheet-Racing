@@ -129,7 +129,7 @@ function Destructible:Move()
     y = self.DisplayObject.y + self.SpeedY
 
     -- we walked off screen, so remove thyself
-    if x < 0 or x > display.contentWidth then
+    if (x < 0 or x > display.contentWidth) and self.DisplayObject ~= nil then
         transition.cancel(self.DisplayObject)
         self.DisplayObject:removeEventListener("collision", onCollision)
         self.DisplayObject:removeEventListener("onDestruct", onDestruct)
@@ -146,7 +146,7 @@ function Destructible:Move()
             x = x,
             y = y,
             onComplete = function()
-                self:Move()
+                pcall(function() self:Move() end)
             end
         }
     )
