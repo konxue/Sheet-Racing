@@ -484,7 +484,13 @@ function Game:stop()
     end
 
     -- go to end scene
+<<<<<<< HEAD
     parameters.Score = parameters.Score + p.Score
+=======
+    if p.HP > 0 then
+        parameters.Score = parameters.Score + p.Score;
+    end
+>>>>>>> d9c520d2775cd3c49682e696e31167af2e0a0c5b
     local options = {effect = "fade", time = 500, params = parameters}
     composer.gotoScene("ending_scene", options)
 end

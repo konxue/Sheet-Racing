@@ -120,8 +120,11 @@ function EnemyVehicle:Start()
                         transition.to(self, {time = 1500, Speed = self.TopSpeed})
                     end
 
+                    -- Randomly generate when to move towards player
+                    local whenTo = math.random(90, 150);
+
                     -- Handle Moving towards the Player position
-                    if (num % 120 == 0) then
+                    if (num % whenTo == 0) then
                         if self.Player.DisplayObject ~= nil then
                             if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
                                 self:Turn("left")
