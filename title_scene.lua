@@ -11,7 +11,7 @@ local scene = composer.newScene()
 local bg -- The background display object
 local btnStart -- The start button
 local btnSettings -- The settings button
-local parameters
+local parameters -- Scene parameters
 
 -- Handles when the settings button is pressed
 -- goes to the options scene
@@ -23,7 +23,7 @@ end
 -- Handles when the start button is pressed
 -- Goes to the level1 scene
 function onStartPress( event )
-  local options = { effect = "fade", time = 500 }
+  local options = { effect = "fade", time = 500, params = parameters }
   composer.gotoScene( 'gameplay_scene', options )
 end
 

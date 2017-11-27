@@ -1,6 +1,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
+local repo = require("Infrastructure.Repository");
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -8,12 +9,13 @@ local widget = require( "widget" )
 
 -- local forward references should go here
 function onHomePress( event )
-  local options = { effect = "fromRight", time = 500 }
+  local options = { effect = "fromRight", time = 500, params=parameters }
   composer.gotoScene( 'title_scene', options )
 end
 
 local bg -- The background display object
 local btnHome -- The Home button
+local parameters -- Scene params
 
 ---------------------------------------------------------------------------------
 
@@ -45,9 +47,11 @@ function scene:show( event )
 
    local sceneGroup = self.view
    local phase = event.phase
+   parameters = event.params;
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      repo:SetParameters(event.params);
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
