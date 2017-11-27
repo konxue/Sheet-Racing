@@ -328,7 +328,7 @@ function Game:create(sceneGroup, params)
     parameters = params;
     -- set enemy count
     curEnemyCount = 4
-    secondsLeft = 10
+    secondsLeft = 90
 
     -- create road background
     self:createBg(sceneGroup)
