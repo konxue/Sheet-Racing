@@ -452,6 +452,7 @@ function Game:stop()
 
     -- remove enemies death special function
     Runtime:removeEventListener("onRemove", onRemove)
+<<<<<<< HEAD
 
     -- stop game timer
     timer.cancel(gameTimerRef)
@@ -466,6 +467,10 @@ function Game:stop()
     -- go to end scene
     local options = {effect = "fade", time = 500}
     composer.gotoScene("ending_scene", options)
+=======
+    local options = { effect = "fade", time = 500 };
+    composer.gotoScene( 'ending_scene', options );
+>>>>>>> 0cdcb7578623fe17c84ea641a4e2e55f45e63ac2
 end
 
 return Game

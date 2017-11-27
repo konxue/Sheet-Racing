@@ -123,7 +123,6 @@ function EnemyVehicle:Start()
             if (num % 120 == 0) then
                 if self.Player.DisplayObject ~= nil then
                     if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
-                        print(self.Speed);
                         self:Turn("left")
                     else
                         self:Turn("right")
