@@ -404,7 +404,7 @@ function Game:stop()
     -- remove enemies death special function
     Runtime:removeEventListener("onRemove", onRemove)
     local options = { effect = "fade", time = 500 };
-    composer.gotoScene( 'ending_scene.lua', options );
+    composer.gotoScene( 'ending_scene', options );
 end
 
 return Game
