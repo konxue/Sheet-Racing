@@ -50,6 +50,8 @@ function scene:show( event )
    local phase = event.phase
    parameters = event.params;
 
+   composer.removeScene("gameplay_scene");
+
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
       repo:SetParameters(event.params);

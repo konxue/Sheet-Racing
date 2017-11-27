@@ -28,7 +28,7 @@ local secondsLeft  -- 3 minutes * 60 seconds = 180 s to count down
 local parameters
 
 -- start and setup physics
-physics:start()
+physics.start()
 physics.setGravity(0, 0) -- no gravity
 
 -- Initializes a new instance of the Game class.
@@ -480,11 +480,11 @@ function Game:stop()
     for i, v in ipairs(enemies) do
         if v ~= nil then
             v:Stop()
+            v = nil
         end
     end
-
+    
     -- go to end scene
-    parameters.Score = parameters.Score + p.Score
     if p.HP > 0 then
         parameters.Score = parameters.Score + p.Score;
     end

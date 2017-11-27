@@ -20,20 +20,20 @@ local parameters
 -- "scene:create()"
 function scene:create(event)
     local sceneGroup = self.view
-
-    -- create game class.
-    game = Game:new()
 end
 
 -- "scene:show()"
 function scene:show(event)
     local sceneGroup = self.view
     local phase = event.phase
-    parameters = event.params;
+    parameters = event.params
 
     if (phase == "will") then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif (phase == "did") then
+        -- create game class.
+        game = Game:new()
+
         -- create game board
         game:create(sceneGroup, parameters)
 
@@ -49,7 +49,11 @@ function scene:hide(event)
 
     if (phase == "will") then
     elseif (phase == "did") then
-    -- Called immediately after scene goes off screen.
+        -- remove all display objects
+        for i, v in ipairs(sceneGroup) do
+            display.remove(v)
+            v = nil
+        end
     end
 end
 
