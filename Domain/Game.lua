@@ -2,7 +2,7 @@ local Player = require("Domain.PlayerVehicle")
 local Enemy = require("Domain.EnemyVehicle")
 local Destructible = require("Domain.destructible")
 local Widget = require("widget")
-local composer = require("composer")
+local composer = require( "composer" )
 local Game = {}
 local p
 local deltatime = 0
@@ -469,6 +469,13 @@ function Game:stop()
 
     -- remove enemies death special function
     Runtime:removeEventListener("onRemove", onRemove)
+<<<<<<< HEAD
+<<<<<<< HEAD
+    local Composeroptions = { effect = "fade", time = 500 };
+    composer.gotoScene( 'ending_scene.lua', Composeroptions );
+=======
+=======
+>>>>>>> e5993883f6bb5179c1f086a78a41417bff64e662
 
     -- stop timers
     if gameTimerRef then
@@ -488,6 +495,10 @@ function Game:stop()
     -- go to end scene
     local options = {effect = "fade", time = 500}
     composer.gotoScene("ending_scene", options)
+<<<<<<< HEAD
+>>>>>>> e5993883f6bb5179c1f086a78a41417bff64e662
+=======
+>>>>>>> e5993883f6bb5179c1f086a78a41417bff64e662
 end
 
 return Game
