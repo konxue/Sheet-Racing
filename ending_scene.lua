@@ -9,7 +9,7 @@ local widget = require( "widget" )
 -- local forward references should go here
 function onHomePress( event )
   local options = { effect = "fromRight", time = 500 }
-  composer.gotoScene( 'title_scene.lua', options )
+  composer.gotoScene( 'title_scene', options )
 end
 
 local bg -- The background display object

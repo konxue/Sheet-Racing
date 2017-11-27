@@ -3,7 +3,7 @@ local Car = require("vehicle.car")
 local Explosion = require("effects.explosion")
 local soundTable = require("sounds.soundTable")
 
-EnemyVehicle = Vehicle:new({HP = 30, Speed = 0, TopSpeed = 95, Value = 50, Enemies = {}})
+EnemyVehicle = Vehicle:new({HP = 30, Speed = 0, TopSpeed = 95, Value = 50, TurnRatio = 3, Enemies = {}})
 EnemyVehicle.Type = "EnemyVehicle"
 
 -- Initializes a new EnemyVehicle object.
@@ -20,13 +20,14 @@ function onDeath(event)
     explode:setSequence("explosion")
     explode.x = event.target.DisplayObject.x
     explode.y = event.target.DisplayObject.y
+    display.remove(event.target.DisplayObject)
+    event.target.DisplayObject = nil
     explode:play()
     audio.play(soundTable["explosion"])
     timer.performWithDelay(
         500,
         function()
-            display.remove(event.target.DisplayObject)
-            event.target.DisplayObject = nil
+            
             explode:removeSelf()
             explode = nil
             Runtime:dispatchEvent({name = "onRemove", target = event.target})
@@ -120,7 +121,7 @@ function EnemyVehicle:Start()
 
             -- Handle Moving towards the Player position
             if (num % 120 == 0) then
-                if self.Player.DisplayObject == nil then
+                if self.Player.DisplayObject ~= nil then
                     if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
                         self:Turn("left")
                     else
