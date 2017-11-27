@@ -36,14 +36,31 @@ local function onAddArmorPressed()
     if params.Score < COST then
         return
     end
-
-    local armor = params.StartingArmor + 5
-    local scor = params.Score - COST
-    params.StartingArmor = armor
-    params.Score = scor
-    startingArmor.text = string.format(startingArmorFormat, armor)
-    score.text = string.format(scoreFormat, scor)
-
+    local scor;
+    if params.StartingArmor <= 95 then
+      local armor = params.StartingArmor + 5
+      scor = params.Score - COST
+      params.StartingArmor = armor
+      params.Score = scor
+      startingArmor.text = string.format(startingArmorFormat, armor)
+      score.text = string.format(scoreFormat, scor)
+    elseif params.StartingArmor > 95 and params.StartingArmor < 100 then
+      local armor = 100
+      params.StartingArmor = armor
+      params.Score = scor
+      startingArmor.text = string.format(startingArmorFormat, armor)
+      score.text = string.format(scoreFormat, scor)
+    end
+    if params.StartingArmor == 100 then
+      addStartingArmor:setEnabled(false)
+      timer.performWithDelay(
+          100,
+          function()
+              addStartingArmor:setFillColor(0, 0, 0)
+          end,
+          1
+      )
+    end
     if scor < COST then
         addStartingArmor:setEnabled(false)
         addStartingHP:setEnabled(false)
@@ -155,17 +172,25 @@ function scene:show(event)
         local startARNum = params.StartingArmor
         local scoreNum = params.Score
 
+<<<<<<< HEAD
+        if scoreNum < 100 then
+=======
         if scoreNum <= COST then
+>>>>>>> f246217666115ac46de185391bc0cf20de3985f4
             addStartingArmor:setEnabled(false)
             addStartingHP:setEnabled(false)
 
             addStartingArmor:setFillColor(0, 0, 0)
             addStartingHP:setFillColor(0, 0, 0)
-        else
+        elseif scoreNum >= 100 and startARNum < 100 then
             addStartingArmor:setEnabled(true)
             addStartingHP:setEnabled(true)
-
             addStartingArmor:setFillColor(1, 1, 1)
+            addStartingHP:setFillColor(1, 1, 1)
+        elseif scoreNum >= 100 and startARNum >= 100 then
+            addStartingHP:setEnabled(false)
+            addStartingArmor:setEnabled(true)
+            addStartingArmor:setFillColor(0, 0, 0)
             addStartingHP:setFillColor(1, 1, 1)
         end
 
