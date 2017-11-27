@@ -15,6 +15,7 @@ physics.setGravity(0, 0) -- no gravity
 
 -- game class
 local game
+local parameters
 
 -- "scene:create()"
 function scene:create(event)
@@ -28,12 +29,13 @@ end
 function scene:show(event)
     local sceneGroup = self.view
     local phase = event.phase
+    parameters = event.params;
 
     if (phase == "will") then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif (phase == "did") then
         -- create game board
-        game:create(sceneGroup)
+        game:create(sceneGroup, parameters)
 
         -- start game
         game:start(sceneGroup)

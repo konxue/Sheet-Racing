@@ -1,5 +1,6 @@
 local composer = require("composer")
 local widget = require("widget")
+local repo = require("Infrastructure.Repository")
 local scene = composer.newScene()
 
 ---------------------------------------------------------------------------------
@@ -26,8 +27,8 @@ local returnHome
 ---------------------------------------------------------------------------------
 
 local function onBackPressed()
-    params.Score = 100
     local options = {effect = "fromRight", time = 400, params = params}
+    repo:SetParameters(params);
     composer.gotoScene("title_scene", options)
 end
 
@@ -171,7 +172,11 @@ function scene:show(event)
         local startARNum = params.StartingArmor
         local scoreNum = params.Score
 
+<<<<<<< HEAD
         if scoreNum < 100 then
+=======
+        if scoreNum <= COST then
+>>>>>>> f246217666115ac46de185391bc0cf20de3985f4
             addStartingArmor:setEnabled(false)
             addStartingHP:setEnabled(false)
 

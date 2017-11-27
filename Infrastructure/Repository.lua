@@ -14,7 +14,7 @@ function Repository:GetParameters()
     local file = io.open(path, "r");
 
     if file == nil then
-        return {StartingHP = 100, StartingArmor = 50, Score = 5000}
+        return {StartingHP = 100, StartingArmor = 50, Score = 0}
     end
 
     local data = file:read("*all");

@@ -23,7 +23,9 @@ local startPos = {
 }
 local destTimerRef  -- destructible timer
 local gameTimerRef  -- game timer
+local enemyDeadTimerRef  -- dead enemies timer
 local secondsLeft  -- 3 minutes * 60 seconds = 180 s to count down
+local parameters
 
 -- start and setup physics
 physics:start()
@@ -93,7 +95,6 @@ function onRemove(event)
     if event.target ~= nil then
         event.target = nil
         curEnemyCount = curEnemyCount - 1
-        print("removed enemy")
     end
 end
 
@@ -293,7 +294,7 @@ end
 -- Create player.
 function Game:createPlayer(sceneGroup)
     -- create new player vehicle
-    p = Player:new()
+    p = Player:new({HP = parameters.StartingHP, Armor = parameters.StartingArmor})
     p:Spawn(display.contentWidth / 2, display.contentWidth / 2 + 150)
     sceneGroup:insert(p.DisplayObject)
 end
@@ -323,10 +324,11 @@ function Game:createEnemies(sceneGroup)
 end
 
 -- Create gameboard.
-function Game:create(sceneGroup)
+function Game:create(sceneGroup, params)
+    parameters = params;
     -- set enemy count
     curEnemyCount = 4
-    secondsLeft = 180
+    secondsLeft = 90
 
     -- create road background
     self:createBg(sceneGroup)
@@ -358,6 +360,23 @@ function Game:create(sceneGroup)
             if secondsLeft == 0 then
                 self:stop()
             end
+        end,
+        -1
+    )
+
+    -- start timer to check for all dead enemies
+    enemyDeadTimerRef =
+        timer.performWithDelay(
+        1000,
+        function()
+            pcall(
+                function()
+                    print("called")
+                    if curEnemyCount == 0 then
+                        self:stop()
+                    end
+                end
+            )
         end,
         -1
     )
@@ -452,31 +471,26 @@ function Game:stop()
 
     -- remove enemies death special function
     Runtime:removeEventListener("onRemove", onRemove)
-<<<<<<< HEAD
-<<<<<<< HEAD
-    local Composeroptions = { effect = "fade", time = 500 };
-    composer.gotoScene( 'ending_scene.lua', Composeroptions );
-=======
-=======
->>>>>>> e5993883f6bb5179c1f086a78a41417bff64e662
 
-    -- stop game timer
-    timer.cancel(gameTimerRef)
+    -- stop timers
+    if gameTimerRef then
+        timer.cancel(gameTimerRef)
+    end
+    if enemyDeadTimerRef then
+        timer.cancel(enemyDeadTimerRef)
+    end
 
     -- stop all enemies
-    for i,v in ipairs(enemies) do
+    for i, v in ipairs(enemies) do
         if v ~= nil then
             v:Stop()
         end
     end
 
     -- go to end scene
-    local options = {effect = "fade", time = 500}
+    parameters.Score = parameters.Score + p.Score;
+    local options = {effect = "fade", time = 500, params = parameters}
     composer.gotoScene("ending_scene", options)
-<<<<<<< HEAD
->>>>>>> e5993883f6bb5179c1f086a78a41417bff64e662
-=======
->>>>>>> e5993883f6bb5179c1f086a78a41417bff64e662
 end
 
 return Game
