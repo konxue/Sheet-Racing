@@ -172,11 +172,7 @@ function scene:show(event)
         local startARNum = params.StartingArmor
         local scoreNum = params.Score
 
-<<<<<<< HEAD
-        if scoreNum < 100 then
-=======
         if scoreNum <= COST then
->>>>>>> f246217666115ac46de185391bc0cf20de3985f4
             addStartingArmor:setEnabled(false)
             addStartingHP:setEnabled(false)
 
