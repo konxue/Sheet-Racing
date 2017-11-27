@@ -9,18 +9,21 @@ local deltatime = 0
 local runtime = 0
 local speedInc = 5
 local pStatText
+local clockText
 local statFormat = "AR: %d | HP: %d | SP: %d | SC: %d | E: %d"
 local enemies = {}
 local dests = {}
 local enemyCount = 4
-local curEnemyCount = 4
+local curEnemyCount
 local startPos = {
     {x = 140, y = 462}, -- 1 postion
     {x = 140, y = 113}, -- 2 postion
     {x = 460, y = 113}, -- 3 postion
     {x = 460, y = 456} -- 4 postion
 }
-local destTimerRef
+local destTimerRef  -- destructible timer
+local gameTimerRef  -- game timer
+local secondsLeft  -- 3 minutes * 60 seconds = 180 s to count down
 
 -- start and setup physics
 physics:start()
@@ -46,6 +49,20 @@ local function Move(event)
     elseif event.phase == "ended" then
         print(event.target.tag .. ": " .. event.target.x .. "," .. event.target.y)
     end
+end
+
+-- This function will update the game timer.
+function updateTime()
+    -- decrement the number of seconds
+    secondsLeft = secondsLeft - 1
+
+    -- time is tracked in seconds.  We need to convert it to minutes and seconds
+    local minutes = math.floor(secondsLeft / 60)
+    local seconds = secondsLeft % 60
+
+    -- make it a string using string format.
+    local timeDisplay = string.format("%02d:%02d", minutes, seconds)
+    clockText.text = timeDisplay
 end
 
 -- This function will track game time.
@@ -266,7 +283,11 @@ function Game:createHud(sceneGroup)
     pStatText:setEmbossColor(color)
     pStatText.tag = "stat"
     sceneGroup:insert(pStatText)
-    pStatText:addEventListener("touch", Move)
+
+    -- create game timer
+    clockText = display.newText("", display.contentWidth / 2, -300, native.systemFontBold, 30)
+    clockText:setFillColor(0.5, 0, 0)
+    sceneGroup:insert(clockText)
 end
 
 -- Create player.
@@ -295,11 +316,18 @@ function Game:createEnemies(sceneGroup)
 
         -- pass enemies table
         e.Enemies = enemies
+
+        -- insert into scene group
+        sceneGroup:insert(e.DisplayObject)
     end
 end
 
 -- Create gameboard.
 function Game:create(sceneGroup)
+    -- set enemy count
+    curEnemyCount = 4
+    secondsLeft = 180
+
     -- create road background
     self:createBg(sceneGroup)
 
@@ -311,6 +339,28 @@ function Game:create(sceneGroup)
 
     -- create enemy vehicles
     self:createEnemies(sceneGroup)
+
+    -- add player death event listener
+    Runtime:addEventListener(
+        "onPlayerDeath",
+        function(event)
+            self:stop()
+        end
+    )
+
+    -- start gamer timer
+    gameTimerRef =
+        timer.performWithDelay(
+        1000,
+        function()
+            updateTime()
+            -- run the timer, when clock stop call the scene:hide to stop the game
+            if secondsLeft == 0 then
+                self:stop()
+            end
+        end,
+        -1
+    )
 end
 
 -- Create destructables randomly.
@@ -320,11 +370,11 @@ function Game:createDest(sceneGroup)
         1000,
         function()
             -- generate random number of npc's
-                local d = Destructible:new()
-                d:SpawnRandom()
-                print (d.DisplayObject.Type .. " is created in game");
-                sceneGroup:insert(d.DisplayObject)
-                table.insert(dests, d)
+            local d = Destructible:new()
+            d:SpawnRandom()
+            print(d.DisplayObject.Type .. " is created in game")
+            sceneGroup:insert(d.DisplayObject)
+            table.insert(dests, d)
         end,
         -1
     )
@@ -379,7 +429,6 @@ function Game:start(sceneGroup)
 
     -- add enemies death special function
     Runtime:addEventListener("onRemove", onRemove)
-
 end
 
 -- This function will stop the game
@@ -403,8 +452,20 @@ function Game:stop()
 
     -- remove enemies death special function
     Runtime:removeEventListener("onRemove", onRemove)
-    local options = { effect = "fade", time = 500 };
-    composer.gotoScene( 'ending_scene.lua', options );
+
+    -- stop game timer
+    timer.cancel(gameTimerRef)
+
+    -- stop all enemies
+    for i,v in ipairs(enemies) do
+        if v ~= nil then
+            v:Stop()
+        end
+    end
+
+    -- go to end scene
+    local options = {effect = "fade", time = 500}
+    composer.gotoScene("ending_scene", options)
 end
 
 return Game

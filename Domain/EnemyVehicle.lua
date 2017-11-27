@@ -20,13 +20,14 @@ function onDeath(event)
     explode:setSequence("explosion")
     explode.x = event.target.DisplayObject.x
     explode.y = event.target.DisplayObject.y
+    display.remove(event.target.DisplayObject)
+    event.target.DisplayObject = nil
     explode:play()
     audio.play(soundTable["explosion"])
     timer.performWithDelay(
         500,
         function()
-            display.remove(event.target.DisplayObject)
-            event.target.DisplayObject = nil
+            
             explode:removeSelf()
             explode = nil
             Runtime:dispatchEvent({name = "onRemove", target = event.target})
