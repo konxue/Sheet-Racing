@@ -8,6 +8,7 @@ local scene = composer.newScene()
 local widget = require("widget")
 local physics = require("physics")
 local Game = require("Domain.Game")
+local secondsLeft = 1 * 5;   -- 3 minutes * 60 seconds = 180 s to count down
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -18,6 +19,22 @@ local Game = require("Domain.Game")
 physics:start()
 physics.setGravity(0, 0) -- no gravity
 
+local clockText = display.newText("00:20", display.contentWidth/2, -300, native.systemFontBold, 30)
+clockText:setFillColor( 0.5, 0, 0 )
+
+function updateTime()
+  -- decrement the number of seconds
+  secondsLeft = secondsLeft - 1
+
+  -- time is tracked in seconds.  We need to convert it to minutes and seconds
+  local minutes = math.floor( secondsLeft / 60 )
+  local seconds = secondsLeft % 60
+
+  -- make it a string using string format.
+  local timeDisplay = string.format( "%02d:%02d", minutes, seconds )
+  clockText.text = timeDisplay
+end
+
 -- game class
 local game
 
@@ -27,9 +44,17 @@ function scene:create(event)
 
     -- create game class.
     game = Game:new()
-
+    timer.performWithDelay( 1000, function()
+      updateTime()
+      -- run the timer, when clock stop call the scene:hide to stop the game
+      if secondsLeft == 0 then
+        game:stop()
+      end
+    end
+      , secondsLeft )
     -- create game board
     game:create(sceneGroup)
+    sceneGroup:insert(clockText);
 end
 
 -- "scene:show()"
@@ -42,7 +67,12 @@ function scene:show(event)
     elseif (phase == "did") then
         -- start game
         game:start(sceneGroup)
-    end
+
+        -- Keep track of time in seconds
+
+
+
+      end
 end
 
 -- "scene:hide()"

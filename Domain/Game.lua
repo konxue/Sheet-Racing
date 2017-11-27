@@ -2,6 +2,7 @@ local Player = require("Domain.PlayerVehicle")
 local Enemy = require("Domain.EnemyVehicle")
 local Destructible = require("Domain.destructible")
 local Widget = require("widget")
+local composer = require("composer")
 local Game = {}
 local p
 local deltatime = 0
@@ -20,6 +21,7 @@ local startPos = {
     {x = 460, y = 456} -- 4 postion
 }
 local destTimerRef
+
 
 -- Initializes a new instance of the Game class.
 function Game:new(obj)
@@ -395,12 +397,11 @@ function Game:stop()
 
     -- remove custom player stat changed event
     Runtime:removeEventListener("onPlayerStatChanged", onPlayerStatChanged)
-    local options = { effect = "fade", time = 500 }
-    composer.gotoScene( 'ending_scenece', options );
-
 
     -- remove enemies death special function
     Runtime:removeEventListener("onRemove", onRemove)
+    local options = { effect = "fade", time = 500 };
+    composer.gotoScene( 'ending_scene.lua', options );
 end
 
 return Game
