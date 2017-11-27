@@ -8,7 +8,7 @@ Vehicle = {
     RRatio = 0.09,
     TurnRatio = 1.2,
     MoveTime = 200,
-    DmgRatio = 2,
+    DmgRatio = 10,
     SpeedInc = 5
 }
 
