@@ -88,8 +88,9 @@ local function onAddHPPressed()
     if params.Score < COST then
         return
     end
-
+    -- adding health
     local hp = params.StartingHP + 5
+    -- costing money to purchase
     local scor = params.Score - COST
     params.StartingHP = hp
     params.Score = scor
@@ -113,7 +114,7 @@ end
 -- "scene:create()"
 function scene:create(event)
     local sceneGroup = self.view
-
+    -- passing the Parameters
     params = event.params
 
     -- Create new buttons and backgrounds
@@ -160,7 +161,7 @@ function scene:create(event)
             onRelease = onBackPressed
         }
     )
-
+    -- adding everything to scene group
     sceneGroup:insert(bg)
     sceneGroup:insert(addStartingArmor)
     sceneGroup:insert(addStartingHP)
@@ -196,14 +197,14 @@ function scene:show(event)
             addStartingHP:setEnabled(true)
             addStartingArmor:setFillColor(1, 1, 1)
             addStartingHP:setFillColor(1, 1, 1)
-        -- disable armor purchase, enable health
+      -- disable armor purchase, enable health
       elseif scoreNum >= 100 and startARNum == 100 then
             addStartingHP:setEnabled(true)
             addStartingArmor:setEnabled(fasle)
             addStartingArmor:setFillColor(1, 1, 1)
             addStartingHP:setFillColor(0, 0, 0)
         end
-
+        --display text
         startingHP.text = string.format(startingHPFormat, startHPNum)
         startingArmor.text = string.format(startingArmorFormat, startARNum)
         score.text = string.format(scoreFormat, scoreNum)
