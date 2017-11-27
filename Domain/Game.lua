@@ -23,6 +23,7 @@ local startPos = {
 }
 local destTimerRef  -- destructible timer
 local gameTimerRef  -- game timer
+local enemyDeadTimerRef  -- dead enemies timer
 local secondsLeft  -- 3 minutes * 60 seconds = 180 s to count down
 
 -- start and setup physics
@@ -93,7 +94,6 @@ function onRemove(event)
     if event.target ~= nil then
         event.target = nil
         curEnemyCount = curEnemyCount - 1
-        print("removed enemy")
     end
 end
 
@@ -361,6 +361,23 @@ function Game:create(sceneGroup)
         end,
         -1
     )
+
+    -- start timer to check for all dead enemies
+    enemyDeadTimerRef =
+        timer.performWithDelay(
+        1000,
+        function()
+            pcall(
+                function()
+                    print("called")
+                    if curEnemyCount == 0 then
+                        self:stop()
+                    end
+                end
+            )
+        end,
+        -1
+    )
 end
 
 -- Create destructables randomly.
@@ -453,11 +470,16 @@ function Game:stop()
     -- remove enemies death special function
     Runtime:removeEventListener("onRemove", onRemove)
 
-    -- stop game timer
-    timer.cancel(gameTimerRef)
+    -- stop timers
+    if gameTimerRef then
+        timer.cancel(gameTimerRef)
+    end
+    if enemyDeadTimerRef then
+        timer.cancel(enemyDeadTimerRef)
+    end
 
     -- stop all enemies
-    for i,v in ipairs(enemies) do
+    for i, v in ipairs(enemies) do
         if v ~= nil then
             v:Stop()
         end

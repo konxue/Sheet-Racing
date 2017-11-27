@@ -27,7 +27,6 @@ function onDeath(event)
     timer.performWithDelay(
         500,
         function()
-            
             explode:removeSelf()
             explode = nil
             Runtime:dispatchEvent({name = "onRemove", target = event.target})
@@ -102,33 +101,37 @@ function EnemyVehicle:Start()
         timer.performWithDelay(
         1 / 60 * 1000,
         function()
-            if (self.DisplayObject == nil or self.Player.DisplayObject == nil) then
-                return
-            end
-            num = num + 1
+            pcall(
+                function()
+                    if (self.DisplayObject == nil or self.Player.DisplayObject == nil) then
+                        return
+                    end
+                    num = num + 1
 
-            -- Handle relative movements based on velocity offsets
-            dv = self.Player.Speed - self.Speed
-            dt = (1000 / 60)
+                    -- Handle relative movements based on velocity offsets
+                    dv = self.Player.Speed - self.Speed
+                    dt = (1000 / 60)
 
-            self:Move(0, dv, dt)
+                    self:Move(0, dv, dt)
 
-            -- Handle catchup mechanic
-            catchUp = 1
-            if (self.Player.Speed - self.Speed > catchUp and self.Player.Speed > 0) then
-                transition.to(self, {time = 1500, Speed = self.TopSpeed})
-            end
+                    -- Handle catchup mechanic
+                    catchUp = 1
+                    if (self.Player.Speed - self.Speed > catchUp and self.Player.Speed > 0) then
+                        transition.to(self, {time = 1500, Speed = self.TopSpeed})
+                    end
 
-            -- Handle Moving towards the Player position
-            if (num % 120 == 0) then
-                if self.Player.DisplayObject ~= nil then
-                    if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
-                        self:Turn("left")
-                    else
-                        self:Turn("right")
+                    -- Handle Moving towards the Player position
+                    if (num % 120 == 0) then
+                        if self.Player.DisplayObject ~= nil then
+                            if ((self.DisplayObject.x - self.Player.DisplayObject.x) > 0) then
+                                self:Turn("left")
+                            else
+                                self:Turn("right")
+                            end
+                        end
                     end
                 end
-            end
+            )
         end,
         -1
     )

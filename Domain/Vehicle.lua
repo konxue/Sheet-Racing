@@ -19,33 +19,34 @@ end
 
 -- Turn the vehicle based on the direction and speed of the car.
 function Vehicle:Turn(direction)
-
     if self.DisplayObject == nil then
         return
     end
 
     if direction == "left" then
-        self.DisplayObject:rotate(-1 * self.RRatio * self.Speed);
-        self:Move(-1 * self.TurnRatio * self.Speed, 0, self.MoveTime);
+        self.DisplayObject:rotate(-1 * self.RRatio * self.Speed)
+        self:Move(-1 * self.TurnRatio * self.Speed, 0, self.MoveTime)
     elseif direction == "right" then
-        self.DisplayObject:rotate(self.RRatio * self.Speed);
-        self:Move(self.TurnRatio * self.Speed, 0, self.MoveTime);
+        self.DisplayObject:rotate(self.RRatio * self.Speed)
+        self:Move(self.TurnRatio * self.Speed, 0, self.MoveTime)
     end
 
     -- rotate the vehicle back straight
     timer.performWithDelay(
         self.MoveTime,
         function()
-    
-            if self.DisplayObject == nil then
-                return
-            end
-            
-            self.DisplayObject:rotate(self.DisplayObject.rotation * -1)
+            pcall(
+                function()
+                    if self.DisplayObject == nil then
+                        return
+                    end
+
+                    self.DisplayObject:rotate(self.DisplayObject.rotation * -1)
+                end
+            )
         end,
         1
-    );
-
+    )
 end
 
 -- Initializes a new Vehicle object
