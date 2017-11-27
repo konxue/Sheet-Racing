@@ -24,6 +24,7 @@ local startPos = {
 local destTimerRef  -- destructible timer
 local gameTimerRef  -- game timer
 local secondsLeft  -- 3 minutes * 60 seconds = 180 s to count down
+local parameters
 
 -- start and setup physics
 physics:start()
@@ -293,7 +294,7 @@ end
 -- Create player.
 function Game:createPlayer(sceneGroup)
     -- create new player vehicle
-    p = Player:new()
+    p = Player:new({HP = parameters.StartingHP, Armor = parameters.StartingArmor})
     p:Spawn(display.contentWidth / 2, display.contentWidth / 2 + 150)
     sceneGroup:insert(p.DisplayObject)
 end
@@ -323,10 +324,11 @@ function Game:createEnemies(sceneGroup)
 end
 
 -- Create gameboard.
-function Game:create(sceneGroup)
+function Game:create(sceneGroup, params)
+    parameters = params;
     -- set enemy count
     curEnemyCount = 4
-    secondsLeft = 180
+    secondsLeft = 10
 
     -- create road background
     self:createBg(sceneGroup)
@@ -464,7 +466,8 @@ function Game:stop()
     end
 
     -- go to end scene
-    local options = {effect = "fade", time = 500}
+    parameters.Score = parameters.Score + p.Score;
+    local options = {effect = "fade", time = 500, params = parameters}
     composer.gotoScene("ending_scene", options)
 end
 
