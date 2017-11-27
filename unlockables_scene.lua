@@ -201,8 +201,8 @@ function scene:show(event)
       elseif scoreNum >= 100 and startARNum == 100 then
             addStartingHP:setEnabled(true)
             addStartingArmor:setEnabled(fasle)
-            addStartingArmor:setFillColor(1, 1, 1)
-            addStartingHP:setFillColor(0, 0, 0)
+            addStartingArmor:setFillColor(0, 0, 0)
+            addStartingHP:setFillColor(1, 1, 1)
         end
         --display text
         startingHP.text = string.format(startingHPFormat, startHPNum)
