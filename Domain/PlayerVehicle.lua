@@ -37,40 +37,30 @@ local function onCollision(event)
         end
 
         audio.play(soundTable["whack"])
-        if (math.random(100) > this.Armor) then -- You take damage
-            if this.HP < this.PlayerDmg then
-                this.HP = 0
-            else
-                this.HP = this.HP - this.PlayerDmg
-            end
-        else -- Armor saved you! You only lose armor, no HP
-            if this.Armor > 5 then
-                this.Armor = this.Armor - 5
-            elseif this.Armor <= 5 then
-                this.Armor = 0;
-            end
-        end
 
-        -- slow down vehicle
-        if (this.Speed > 0) then
-            this.Speed = this.Speed - this.SpeedInc
-        end
         -- send player stat change event
         Runtime:dispatchEvent({name = "onPlayerStatChanged"})
 
-        if (that.Type == "Pickup") then
-            -- Handle Pickups
-            print("I ran over a pickup!")
-        end
-
         if (that.Type == "EnemyVehicle") then
-            -- Handle damage doing to enemy + points
-            print("I hit an enemy vehicle!")
-        end
+            -- slow down vehicle
+            if (this.Speed > 0) then
+                this.Speed = this.Speed - this.SpeedInc
+            end
 
-        if (that.Type == "Destructible") then
-            -- Handle adding to our score
-            print("I hit a destructible!")
+             -- You take damage
+            if (math.random(100) > this.Armor) then
+                if this.HP < this.PlayerDmg then
+                    this.HP = 0
+                else
+                    this.HP = this.HP - this.PlayerDmg
+                end
+            else -- Armor saved you! You only lose armor, no HP
+                if this.Armor > 5 then
+                    this.Armor = this.Armor - 5
+                elseif this.Armor <= 5 then
+                    this.Armor = 0
+                end
+            end
         end
 
         if (this.HP <= 0) then
