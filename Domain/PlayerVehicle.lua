@@ -1,7 +1,3 @@
--- TODO: Powerups
--- TODO: Points
--- TODO: (?) Advanced damage
-
 local Vehicle = require("Domain.Vehicle")
 local Explosion = require("effects.explosion")
 local Physics = require("physics")

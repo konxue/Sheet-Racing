@@ -1,7 +1,6 @@
--- THIS IS THE SCENE TEMPLATE FROM CANVAS --
-
 local composer = require( "composer" )
 local widget = require( "widget" )
+local repo = require("Infrastructure.Repository")
 local scene = composer.newScene()
 
 ---------------------------------------------------------------------------------
@@ -12,11 +11,12 @@ local scene = composer.newScene()
 local bg -- The background display object
 local btnStart -- The start button
 local btnSettings -- The settings button
+local parameters
 
 -- Handles when the settings button is pressed
 -- goes to the options scene
 function onSettingsPress( event )
-  local options = { effect = "fromRight", time = 500, params = {StartingHP = 100, StartingArmor = 50, Score = 0} }
+  local options = { effect = "fromRight", time = 500, params = parameters }
   composer.gotoScene( 'unlockables_scene', options )
 end
 
@@ -88,6 +88,7 @@ function scene:show( event )
 
    local sceneGroup = self.view
    local phase = event.phase
+   parameters = event.params or repo:GetParameters();
    --composerOptions.setting = event.params.setting
 
    if ( phase == "will" ) then

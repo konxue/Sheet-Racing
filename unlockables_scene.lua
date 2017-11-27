@@ -143,6 +143,8 @@ end
 
 -- "scene:show()"
 function scene:show(event)
+    params = event.params;
+
     local sceneGroup = self.view
     local phase = event.phase
 
