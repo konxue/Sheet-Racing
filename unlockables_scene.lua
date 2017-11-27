@@ -6,8 +6,9 @@ local scene = composer.newScene()
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
--- local forward references should go here
+-- constants
+local COST = 100;
+-- parameters from title scene
 local params;
 -- PLUS Signs
 local addStartingArmor;
@@ -31,11 +32,49 @@ local function onBackPressed()
 end
 
 local function onAddArmorPressed()
-    print("onAddArmorPressed");
+    if params.Score < COST then
+        return
+    end
+
+    local armor = params.StartingArmor + 5;
+    local scor = params.Score  - COST;
+    params.StartingArmor = armor;
+    params.Score = scor;
+    startingArmor.text = string.format(startingArmorFormat, armor);
+    score.text = string.format(scoreFormat, scor);
+
+    if scor < COST then
+        addStartingArmor:setEnabled(false);
+        addStartingHP:setEnabled(false);
+        timer.performWithDelay(100, function() 
+        addStartingArmor:setFillColor(0, 0, 0 );
+        addStartingHP:setFillColor(0, 0, 0 );
+        end,
+        1);
+    end
 end
 
 local function onAddHPPressed()
-    print("onAddHPPressed");
+    if params.Score < COST then
+        return
+    end
+
+    local hp = params.StartingHP + 5;
+    local scor = params.Score  - COST;
+    params.StartingHP = hp;
+    params.Score = scor;
+    startingHP.text = string.format(startingHPFormat, hp);
+    score.text = string.format(scoreFormat, scor);
+
+    if scor < COST then
+        addStartingArmor:setEnabled(false);
+        addStartingHP:setEnabled(false);
+        timer.performWithDelay(100, function() 
+        addStartingArmor:setFillColor(0, 0, 0 );
+        addStartingHP:setFillColor(0, 0, 0 );
+        end,
+        1);
+    end
 end
 
 -- "scene:create()"
@@ -51,8 +90,8 @@ function scene:create(event)
     startingHP = display.newText({text = '', x = 175, y = 250, width=300});
     startingArmor = display.newText({text = '', x = 175, y = 350, width=300});
     score = display.newText({text = '', x = display.contentCenterX, y = 485});
-    addStartingArmor = widget.newButton({label = "+", fontSize = 101, left = 400, top = 195, textOnly = true, labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } }, onRelease=onAddArmorPressed})
-    addStartingHP = widget.newButton({label = "+", fontSize = 101, left = 400, top = 295, textOnly = true, labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } }, onRelease=onAddHPPressed})
+    addStartingArmor = widget.newButton({label = "+", fontSize = 101, left = 400, top = 295, textOnly = true, labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } }, onRelease=onAddArmorPressed})
+    addStartingHP = widget.newButton({label = "+", fontSize = 101, left = 400, top = 195, textOnly = true, labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } }, onRelease=onAddHPPressed})
     returnHome = widget.newButton({label="Back", fontSize=60, left = 20, top = 600 - 50, labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } }, onRelease=onBackPressed})
 
     sceneGroup:insert(bg);
