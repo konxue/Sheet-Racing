@@ -22,6 +22,7 @@ end
 
 -- Event handler for when the vehicle dies
 function onDestruct(event)
+  -- when human or squirrel is dying
     if (event.target.DisplayObject.Type == "human" or event.target.DisplayObject.Type == "squirrel") then
         -- armor image found at http://www.iconarchive.com/show/blue-bits-icons-by-icojam/shield-icon.html
         timer.performWithDelay(1000, audio.play(soundTable["hurt"])) -- play sound
@@ -40,6 +41,7 @@ function onDestruct(event)
             end,
             1
         )
+    -- when armor is obtaining
     elseif (event.target.DisplayObject.Type == "armor") then
         timer.performWithDelay(1000, audio.play(soundTable["hp"])) -- play sound
         local ARMORpowerup =
@@ -53,6 +55,7 @@ function onDestruct(event)
                 ARMORpowerup = nil
             end
         )
+    -- when health is obtaining
     elseif (event.target.DisplayObject.Type == "heart") then
         timer.performWithDelay(1000, audio.play(soundTable["hp"])) -- play sound
         local HPpowerup = display.newImage("effects/hp.png", event.target.DisplayObject.x, event.target.DisplayObject.y) -- display heart effect
@@ -74,14 +77,13 @@ local function onCollision(event)
     local that = event.other.pp
     --print (this.DisplayObject.Type .. " got hit by ".. that.Type);
     if (event.phase == "began") then
-        -- we hit heart
         if that.Type == "PlayerVehicle" and this.DisplayObject.Type == "heart" then
-            -- we hit armor
+            -- we hit heart
             this.HP = this.HP - 1 -- reduce destructible health
             that.HP = that.HP + 21 -- increase our health when hit heart as the powerup~
             that.Score = that.Score + this.Value -- increase players score
         elseif that.Type == "PlayerVehicle" and this.DisplayObject.Type == "armor" then
-            -- when we hit human or squirrel
+            -- we hit armor
             this.HP = this.HP - 1 -- reduce destructible health
             if that.Armor <= 95 then --  only when armor is lesser than or equal to 95
                 that.Armor = that.Armor + 5 -- increase our armor when hit shield as the powerup~
@@ -90,6 +92,7 @@ local function onCollision(event)
             end
             that.Score = that.Score + this.Value -- increase players score
         elseif
+            -- when we hit human or squirrel
             that.Type == "PlayerVehicle" and
                 (this.DisplayObject.Type == "human" or this.DisplayObject.Type == "squirrel")
          then

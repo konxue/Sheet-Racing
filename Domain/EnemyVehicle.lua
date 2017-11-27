@@ -17,14 +17,14 @@ end
 -- Event handler for when the vehicle dies
 function onDeath(event)
     local explode = display.newSprite(Explosion["sheet"], Explosion["sequenceData"])
-    explode:setSequence("explosion")
+    explode:setSequence("explosion") -- explosion animation
     explode.x = event.target.DisplayObject.x
     explode.y = event.target.DisplayObject.y
-    display.remove(event.target.DisplayObject)
+    display.remove(event.target.DisplayObject) -- remove the pervious object
     event.target.DisplayObject = nil
-    explode:play()
+    explode:play() -- play explosion
     audio.play(soundTable["explosion"])
-    timer.performWithDelay(
+    timer.performWithDelay( -- remove explosion effect after 0.5s
         500,
         function()
             explode:removeSelf()

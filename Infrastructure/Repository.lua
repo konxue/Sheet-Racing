@@ -9,11 +9,13 @@ function Repository:new(obj)
     return t
 end
 
+-- getting parameters from the file
 function Repository:GetParameters()
     local path = system.pathForFile("SheetRacingSave.json", system.DocumentsDirectory);
     local file = io.open(path, "r");
-
+    -- if file is no exist or empty
     if file == nil then
+      -- default parameters
         return {StartingHP = 100, StartingArmor = 50, Score = 0}
     end
 
@@ -23,7 +25,7 @@ function Repository:GetParameters()
 
     return json.decode(data);
 end
-
+-- save to the file
 function Repository:SetParameters(table)
     local path = system.pathForFile("SheetRacingSave.json", system.DocumentsDirectory);
     local file = io.open(path, "w");

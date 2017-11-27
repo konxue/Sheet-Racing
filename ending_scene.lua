@@ -23,9 +23,9 @@ local parameters -- Scene params
 function scene:create( event )
 
    local sceneGroup = self.view
-
+   -- background pic for game over scene
    bg = display.newImage('gameover.png', display.contentWidth / 2, display.contentHeight / 2);
-
+   -- button option for home
    local homeOptions = {
      x = display.contentWidth / 2, -- just left of middle of screen
      y = display.contentCenterY + 300, -- just below center of screen
@@ -36,6 +36,7 @@ function scene:create( event )
      onRelease = onHomePress -- wiring up handler
    }
    btnHome = widget.newButton( homeOptions )
+   -- insert to scene group
    sceneGroup:insert(bg);
    sceneGroup:insert(btnHome);
    -- Initialize the scene here.
